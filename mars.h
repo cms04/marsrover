@@ -2,8 +2,10 @@ typedef struct {
   char** oberflaeche;
   int* roverXPosition;
   int* roverYPosition;
+  int* height;
+  int* width;
 } Mars;
 
-void printField(char**);
-Mars initalizeMars();
+void printField(Mars*);
+Mars initalizeMars(int, int);
 void deleteMars(Mars*);
