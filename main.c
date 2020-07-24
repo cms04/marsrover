@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+typedef struct {
+  char** oberflaeche;
+  int* roverXPosition;
+  int* roverYPosition;
+} Mars;
+
 void printField(char** marskarte) {
   unsigned short i, j;
   printf("\n");
@@ -34,35 +40,42 @@ void putRandomObstracles(char** marskarte) {
   }
 }
 
-void putRover(char** marskarte) {
-  *(*(marskarte + 10) + 40) = '^';
+void putRover(Mars* mars) {
+  *(*(mars->oberflaeche + 10) + 40) = '^';
+  *(mars)->roverXPosition = 40;
+  *(mars)->roverYPosition = 10;
 }
 
-char** initalizeMarsKarte() {
+Mars initalizeMars() {
+  Mars mars;
   unsigned short i, j;
-  char** marskarte = (char**) malloc(20 * 80 * sizeof(char));
+  mars.oberflaeche = (char**) malloc(20 * 80 * sizeof(char));
   for (i = 0; i < 20; i++) {
-    *(marskarte + i) = (char*) malloc(80 * sizeof(char));
+    *(mars.oberflaeche + i) = (char*) malloc(80 * sizeof(char));
     for (j = 0; j < 80; j++) {
-      *(*(marskarte + i) + j) = ' ';
+      *(*(mars.oberflaeche + i) + j) = ' ';
     }
   }
-  putRandomObstracles(marskarte);
-  putRover(marskarte);
-  return marskarte;
+  mars.roverXPosition = (int *) malloc(sizeof(int));
+  mars.roverYPosition = (int *) malloc(sizeof(int));
+  putRandomObstracles(mars.oberflaeche);
+  putRover(&mars);
+  return mars;
 }
 
-void deleteMarsKarte(char** marskarte) {
+void deleteMars(Mars* mars) {
   unsigned short i;
   for (i = 0; i < 20; i++) {
-    free(*(marskarte + i));
+    free(*(mars->oberflaeche + i));
   }
-  free(marskarte);
+  free(mars->oberflaeche);
+  free(mars->roverXPosition);
+  free(mars->roverYPosition);
 }
 
 int main() {
-  char** marskarte = initalizeMarsKarte();
-  printField(marskarte);
-  deleteMarsKarte(marskarte);
+  Mars mars = initalizeMars();
+  printField((&mars)->oberflaeche);
+  deleteMars(&mars);
   return 0;
 }
