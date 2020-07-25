@@ -4,6 +4,10 @@ ProPra-Marsrover in C
 
 Vorbereitungsprojekt für das C-Praktikum
 
+## Ausführung
+
+Das Programm wird kompiliert mit dem Befehl `make`. Anschließend wird das Programm mit `./marsrover` gestartet.
+
 ## Funktionen
 
 Wichtige Funktionen der Programmiersprache C, die verwendet werden sollten:
