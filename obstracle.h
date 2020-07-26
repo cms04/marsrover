@@ -1,8 +1,8 @@
 typedef struct Hindernis {
-    unsigned int* xpos;
-    unsigned int* ypos;
+    unsigned short* xpos;
+    unsigned short* ypos;
     struct Hindernis* next;
 } Hindernis;
 
-Hindernis* createHindernis(int, int);
+Hindernis* createHindernis(unsigned short, unsigned short);
 void delete(Hindernis*);

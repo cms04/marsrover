@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "obstracle.h"
 
-Hindernis* createHindernis(int x, int y) {
+Hindernis* createHindernis(unsigned short x, unsigned short y) {
     Hindernis* hindernis = malloc(sizeof(Hindernis));
     hindernis->next = NULL;
-    hindernis->xpos = (unsigned int *) malloc(sizeof(unsigned int));
-    hindernis->ypos = (unsigned int *) malloc(sizeof(unsigned int));
+    hindernis->xpos = (unsigned short *) malloc(sizeof(unsigned short));
+    hindernis->ypos = (unsigned short *) malloc(sizeof(unsigned short));
     *(hindernis->xpos) = x;
     *(hindernis->ypos) = y;
     return hindernis;

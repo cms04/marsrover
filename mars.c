@@ -40,13 +40,13 @@ void putRandomObstracles(Mars* mars) {
 }
 
 void putRover(Mars* mars) {
-    int xpos = *(mars->width) / 2, ypos = *(mars->height) / 2;
+    unsigned short xpos = *(mars->width) / 2, ypos = *(mars->height) / 2;
     *(*(mars->oberflaeche + ypos) + xpos) = '^';
     *(mars)->roverXPosition = xpos;
     *(mars)->roverYPosition = ypos;
 }
 
-Mars* initalizeMars(int height, int width) {
+Mars* initalizeMars(unsigned short height, unsigned short width) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
     unsigned short i, j;
     mars->oberflaeche = (char**) malloc(height * width * sizeof(char));
@@ -56,10 +56,10 @@ Mars* initalizeMars(int height, int width) {
             *(*(mars->oberflaeche + i) + j) = ' ';
         }
     }
-    mars->roverXPosition = (int *) malloc(sizeof(int));
-    mars->roverYPosition = (int *) malloc(sizeof(int));
-    mars->height = (int *) malloc(sizeof(int));
-    mars->width = (int *) malloc(sizeof(int));
+    mars->roverXPosition = (unsigned short *) malloc(sizeof(unsigned short));
+    mars->roverYPosition = (unsigned short *) malloc(sizeof(unsigned short));
+    mars->height = (unsigned short *) malloc(sizeof(unsigned short));
+    mars->width = (unsigned short *) malloc(sizeof(unsigned short));
     *(mars->height) = height;
     *(mars->width) = width;
     putRandomObstracles(mars);

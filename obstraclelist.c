@@ -19,9 +19,10 @@ void insertToList(ObstracleList* list, Hindernis* obs) {
 void deleteAll(ObstracleList* list) {
     Hindernis* cur = list->head;
     Hindernis* next = NULL;
-    for (; cur != NULL; cur = next) {
+    while (cur != NULL) {
         next = cur->next;
         delete(cur);
+        cur = next;
     }
     free(list);
 }

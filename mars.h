@@ -2,13 +2,13 @@
 
 typedef struct {
     char** oberflaeche;
-    int* roverXPosition;
-    int* roverYPosition;
-    int* height;
-    int* width;
+    unsigned short* roverXPosition;
+    unsigned short* roverYPosition;
+    unsigned short* height;
+    unsigned short* width;
     ObstracleList* obstracles;
 } Mars;
 
 void printField(Mars*);
-Mars* initalizeMars(int, int);
+Mars* initalizeMars(unsigned short, unsigned short);
 void deleteMars(Mars*);
