@@ -7,3 +7,4 @@ typedef struct {
 Rover* createRover(unsigned short, unsigned short);
 void deleteRover(Rover*);
 int isRoverPosition(Rover*, unsigned short, unsigned short);
+void doCommand(Rover*, ObstracleList*, char);

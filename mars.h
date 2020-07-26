@@ -14,3 +14,4 @@ typedef struct {
 void printField(Mars*);
 Mars* initalizeMars(unsigned short, unsigned short);
 void deleteMars(Mars*);
+void moveRover(Mars*, char);

@@ -26,6 +26,10 @@ void printField(Mars* mars) {
     printf("\n");
 }
 
+void moveRover(Mars* mars, char command) {
+    doCommand(mars->rover, mars->obstracles, command);
+}
+
 void putRandomObstracles(Mars* mars) {
     ObstracleList* obstracles = create();
     unsigned short i, j;
