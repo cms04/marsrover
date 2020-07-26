@@ -37,7 +37,7 @@ void putRandomObstracles(Mars* mars) {
     srand((unsigned) time(&t));
     for (i = 0; i < *(mars->height); i++) {
         for (j = 0; j < *(mars->width); j++) {
-            if (rand() % 5 == 0 && (j != *(mars->width) / 2 || i != *(mars->height) / 2)) {
+            if (rand() % 5 == 0 && (j != 0 || i != *(mars->height) / 2)) {
                 *(*(mars->oberflaeche + i) + j) = '#';
                 Hindernis* obs = createHindernis(j, i);
                 insertToList(obstracles, obs);
@@ -48,7 +48,7 @@ void putRandomObstracles(Mars* mars) {
 }
 
 void putRover(Mars* mars) {
-    unsigned short xpos = *(mars->width) / 2, ypos = *(mars->height) / 2;
+    unsigned short xpos = 0, ypos = *(mars->height) / 2;
     mars->rover = createRover(xpos, ypos);
 }
 

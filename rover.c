@@ -22,9 +22,11 @@ void deleteRover(Rover* rover) {
 }
 
 void moveUpIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
-    unsigned short newx = *(rover->xpos), newy = *(rover->ypos) - 1;
-    if (newy < 0) {
+    unsigned short newx = *(rover->xpos), newy;
+    if (*(rover->ypos) == 0) {
         newy = dimy - 1;
+    } else {
+        newy = *(rover->ypos) - 1;
     }
     if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->ypos) = newy;
@@ -42,9 +44,11 @@ void moveDownIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) 
 }
 
 void moveLeftIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
-    unsigned short newx = *(rover->xpos) - 1, newy = *(rover->ypos);
-    if (newx < 0) {
+    unsigned short newx, newy = *(rover->ypos);
+    if (*(rover->xpos) == 0) {
         newx = dimx - 1;
+    } else {
+        newx = *(rover->xpos) - 1;
     }
     if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->xpos) = newx;
