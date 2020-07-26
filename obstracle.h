@@ -6,3 +6,4 @@ typedef struct Hindernis {
 
 Hindernis* createHindernis(unsigned short, unsigned short);
 void delete(Hindernis*);
+int equals(Hindernis*, unsigned short, unsigned short);

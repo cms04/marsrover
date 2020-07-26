@@ -17,3 +17,7 @@ void delete(Hindernis* hindernis) {
     free(hindernis->ypos);
     free(hindernis);
 }
+
+int equals(Hindernis* obs, unsigned short x, unsigned short y) {
+    return (*(obs->xpos) == x) && (*(obs->ypos) == y);
+}

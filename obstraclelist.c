@@ -26,3 +26,14 @@ void deleteAll(ObstracleList* list) {
     }
     free(list);
 }
+
+int contains(ObstracleList* list, unsigned short x, unsigned short y) {
+    Hindernis* cur = list->head;
+    while (cur != NULL) {
+        if (equals(cur, x, y)) {
+            return 1;
+        }
+        cur = cur->next;
+    }
+    return 0;
+}
