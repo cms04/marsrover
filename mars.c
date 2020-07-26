@@ -23,6 +23,7 @@ void printField(Mars* mars) {
 }
 
 void putRandomObstracles(Mars* mars) {
+    ObstracleList* obstracles = create();
     unsigned short i, j;
     time_t t;
     srand((unsigned) time(&t));
@@ -30,9 +31,12 @@ void putRandomObstracles(Mars* mars) {
         for (j = 0; j < *(mars->width); j++) {
             if (rand() % 5 == 0) {
                 *(*(mars->oberflaeche + i) + j) = '#';
+                Hindernis* obs = createHindernis(j, i);
+                insertToList(obstracles, obs);
             }
         }
     }
+    mars->obstracles = obstracles;
 }
 
 void putRover(Mars* mars) {
@@ -42,24 +46,24 @@ void putRover(Mars* mars) {
     *(mars)->roverYPosition = ypos;
 }
 
-Mars initalizeMars(int height, int width) {
-    Mars mars;
+Mars* initalizeMars(int height, int width) {
+    Mars* mars = (Mars *) malloc(sizeof(Mars));
     unsigned short i, j;
-    mars.oberflaeche = (char**) malloc(height * width * sizeof(char));
+    mars->oberflaeche = (char**) malloc(height * width * sizeof(char));
     for (i = 0; i < height; i++) {
-        *(mars.oberflaeche + i) = (char*) malloc(width * sizeof(char));
+        *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
         for (j = 0; j < width; j++) {
-            *(*(mars.oberflaeche + i) + j) = ' ';
+            *(*(mars->oberflaeche + i) + j) = ' ';
         }
     }
-    mars.roverXPosition = (int *) malloc(sizeof(int));
-    mars.roverYPosition = (int *) malloc(sizeof(int));
-    mars.height = (int *) malloc(sizeof(int));
-    mars.width = (int *) malloc(sizeof(int));
-    *(mars.height) = height;
-    *(mars.width) = width;
-    putRandomObstracles(&mars);
-    putRover(&mars);
+    mars->roverXPosition = (int *) malloc(sizeof(int));
+    mars->roverYPosition = (int *) malloc(sizeof(int));
+    mars->height = (int *) malloc(sizeof(int));
+    mars->width = (int *) malloc(sizeof(int));
+    *(mars->height) = height;
+    *(mars->width) = width;
+    putRandomObstracles(mars);
+    putRover(mars);
     return mars;
 }
 
@@ -73,4 +77,6 @@ void deleteMars(Mars* mars) {
     free(mars->roverYPosition);
     free(mars->height);
     free(mars->width);
+    deleteAll(mars->obstracles);
+    free(mars);
 }
