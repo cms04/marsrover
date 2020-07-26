@@ -12,7 +12,11 @@ void printField(Mars* mars) {
     printf("\n");
     for (i = 0; i < *(mars->height); i++) {
         for (j = 0; j < *(mars->width); j++) {
-            printf("%c", *(*(mars->oberflaeche + i) + j));
+            if (isRoverPosition(mars->rover, j, i)) {
+                printf("%c", *(mars->rover->direction));
+            } else {
+                printf("%c", *(*(mars->oberflaeche + i) + j));
+            }
         }
         printf("\n");
     }
@@ -41,9 +45,7 @@ void putRandomObstracles(Mars* mars) {
 
 void putRover(Mars* mars) {
     unsigned short xpos = *(mars->width) / 2, ypos = *(mars->height) / 2;
-    *(*(mars->oberflaeche + ypos) + xpos) = '^';
-    *(mars)->roverXPosition = xpos;
-    *(mars)->roverYPosition = ypos;
+    mars->rover = createRover(xpos, ypos);
 }
 
 Mars* initalizeMars(unsigned short height, unsigned short width) {
@@ -77,6 +79,7 @@ void deleteMars(Mars* mars) {
     free(mars->roverYPosition);
     free(mars->height);
     free(mars->width);
+    deleteRover(mars->rover);
     deleteAll(mars->obstracles);
     free(mars);
 }

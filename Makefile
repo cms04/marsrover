@@ -1,5 +1,8 @@
-marsrover: main.o mars.o obstracle.o obstraclelist.o
-	gcc -Wall -std=c99 -o marsrover main.o mars.o obstracle.o obstraclelist.o
+marsrover: main.o mars.o obstracle.o obstraclelist.o rover.o
+	gcc -Wall -std=c99 -o marsrover main.o mars.o obstracle.o obstraclelist.o rover.o
+
+rover.o: rover.c
+	gcc -Wall -std=c99 -c rover.c
 
 obstracle.o: obstracle.c
 	gcc -Wall -std=c99 -c obstracle.c

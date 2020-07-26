@@ -1,4 +1,5 @@
 #include "obstraclelist.h"
+#include "rover.h"
 
 typedef struct {
     char** oberflaeche;
@@ -7,6 +8,7 @@ typedef struct {
     unsigned short* height;
     unsigned short* width;
     ObstracleList* obstracles;
+    Rover* rover;
 } Mars;
 
 void printField(Mars*);
