@@ -20,27 +20,43 @@ void deleteRover(Rover* rover) {
     free(rover);
 }
 
-void moveUpIfPossible(Rover* rover, ObstracleList* list) {
-    if (contains(list, *(rover->xpos), *(rover->ypos) - 1) == 0) {
-        *(rover->ypos) = *(rover->ypos) - 1;
+void moveUpIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
+    unsigned short newx = *(rover->xpos), newy = *(rover->ypos) - 1;
+    if (newy < 0) {
+        newy = dimy - 1;
+    }
+    if (contains(list, newx, newy) == 0) {
+        *(rover->ypos) = newy;
     }
 }
 
-void moveDownIfPossible(Rover* rover, ObstracleList* list) {
-    if (contains(list, *(rover->xpos), *(rover->ypos) + 1) == 0) {
-        *(rover->ypos) = *(rover->ypos) - 1;
+void moveDownIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
+    unsigned short newx = *(rover->xpos), newy = *(rover->ypos) + 1;
+    if (newy >= dimy) {
+        newy = 0;
+    }
+    if (contains(list, newx, newy) == 0) {
+        *(rover->ypos) = newy;
     }
 }
 
-void moveLeftIfPossible(Rover* rover, ObstracleList* list) {
-    if (contains(list, *(rover->xpos) - 1, *(rover->ypos)) == 0) {
-        *(rover->xpos) = *(rover->xpos) - 1;
+void moveLeftIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
+    unsigned short newx = *(rover->xpos) - 1, newy = *(rover->ypos);
+    if (newx < 0) {
+        newx = dimx - 1;
+    }
+    if (contains(list, newx, newy) == 0) {
+        *(rover->xpos) = newx;
     }
 }
 
-void moveRightIfPossible(Rover* rover, ObstracleList* list) {
-    if (contains(list, *(rover->xpos) + 1, *(rover->ypos)) == 0) {
-        *(rover->xpos) = *(rover->xpos) + 1;
+void moveRightIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
+    unsigned short newx = *(rover->xpos) + 1, newy = *(rover->ypos);
+    if (newy >= dimx) {
+        newy = 0;
+    }
+    if (contains(list, newx, newy) == 0) {
+        *(rover->xpos) = newx;
     }
 }
 
@@ -72,38 +88,38 @@ void turnRight(Rover* rover) {
     }
 }
 
-void moveForwardIfPossible(Rover* rover, ObstracleList* list) {
+void moveForwardIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
     if (*(rover->direction) == '^') {
-        moveUpIfPossible(rover, list);
+        moveUpIfPossible(rover, list, y);
     } else if (*(rover->direction) == '>') {
-        moveRightIfPossible(rover, list);
+        moveRightIfPossible(rover, list, x);
     } else if (*(rover->direction) == 'v') {
-        moveDownIfPossible(rover, list);
+        moveDownIfPossible(rover, list, y);
     } else if (*(rover->direction) == '<') {
-        moveLeftIfPossible(rover, list);
+        moveLeftIfPossible(rover, list, x);
     }
 }
 
-void moveBackIfPossible(Rover* rover, ObstracleList* list) {
+void moveBackIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
     if (*(rover->direction) == '^') {
-        moveDownIfPossible(rover, list);
+        moveDownIfPossible(rover, list, y);
     } else if (*(rover->direction) == '>') {
-        moveLeftIfPossible(rover, list);
+        moveLeftIfPossible(rover, list, x);
     } else if (*(rover->direction) == 'v') {
-        moveUpIfPossible(rover, list);
+        moveUpIfPossible(rover, list, y);
     } else if (*(rover->direction) == '<') {
-        moveRightIfPossible(rover, list);
+        moveRightIfPossible(rover, list, x);
     }
 }
 
-void doCommand(Rover* rover, ObstracleList* list, char command) {
+void doCommand(Rover* rover, ObstracleList* lst, char command, unsigned short x, unsigned short y) {
     if (command == 'L') {
         turnLeft(rover);
     } else if (command == 'R') {
         turnRight(rover);
     } else if (command == 'M') {
-        moveForwardIfPossible(rover, list);
+        moveForwardIfPossible(rover, lst, x, y);
     } else if (command == 'B') {
-        moveBackIfPossible(rover, list);
+        moveBackIfPossible(rover, lst, x, y);
     }
 }

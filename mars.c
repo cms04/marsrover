@@ -27,7 +27,7 @@ void printField(Mars* mars) {
 }
 
 void moveRover(Mars* mars, char command) {
-    doCommand(mars->rover, mars->obstracles, command);
+    doCommand(mars->rover, mars->obstracles, command, *(mars->width), *(mars->height));
 }
 
 void putRandomObstracles(Mars* mars) {
