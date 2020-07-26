@@ -4,6 +4,7 @@
 
 ObstracleList* create() {
     ObstracleList* list = (ObstracleList*) malloc(sizeof(ObstracleList));
+    list->head = NULL;
     return list;
 }
 

@@ -27,7 +27,7 @@ void printField(Mars* mars) {
 }
 
 void moveRover(Mars* mars, char command) {
-    doCommand(mars->rover, mars->obstracles, command, *(mars->width), *(mars->height));
+    doCommand(mars->rover, command, *(mars->width), *(mars->height));
 }
 
 void putRandomObstracles(Mars* mars) {
@@ -44,7 +44,7 @@ void putRandomObstracles(Mars* mars) {
             }
         }
     }
-    mars->obstracles = obstracles;
+    mars->rover->obstracles = obstracles;
 }
 
 void putRover(Mars* mars) {
@@ -68,8 +68,8 @@ Mars* initalizeMars(unsigned short height, unsigned short width) {
     mars->width = (unsigned short *) malloc(sizeof(unsigned short));
     *(mars->height) = height;
     *(mars->width) = width;
-    putRandomObstracles(mars);
     putRover(mars);
+    putRandomObstracles(mars);
     return mars;
 }
 
@@ -84,6 +84,5 @@ void deleteMars(Mars* mars) {
     free(mars->height);
     free(mars->width);
     deleteRover(mars->rover);
-    deleteAll(mars->obstracles);
     free(mars);
 }

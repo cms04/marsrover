@@ -17,6 +17,7 @@ void deleteRover(Rover* rover) {
     free(rover->xpos);
     free(rover->ypos);
     free(rover->direction);
+    deleteAll(rover->obstracles);
     free(rover);
 }
 
@@ -25,7 +26,7 @@ void moveUpIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
     if (newy < 0) {
         newy = dimy - 1;
     }
-    if (contains(list, newx, newy) == 0) {
+    if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->ypos) = newy;
     }
 }
@@ -35,7 +36,7 @@ void moveDownIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) 
     if (newy >= dimy) {
         newy = 0;
     }
-    if (contains(list, newx, newy) == 0) {
+    if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->ypos) = newy;
     }
 }
@@ -45,7 +46,7 @@ void moveLeftIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) 
     if (newx < 0) {
         newx = dimx - 1;
     }
-    if (contains(list, newx, newy) == 0) {
+    if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->xpos) = newx;
     }
 }
@@ -55,7 +56,7 @@ void moveRightIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx)
     if (newy >= dimx) {
         newy = 0;
     }
-    if (contains(list, newx, newy) == 0) {
+    if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->xpos) = newx;
     }
 }
@@ -112,14 +113,14 @@ void moveBackIfPossible(Rover* rover, ObstracleList* list, unsigned short x, uns
     }
 }
 
-void doCommand(Rover* rover, ObstracleList* lst, char command, unsigned short x, unsigned short y) {
+void doCommand(Rover* rover, char command, unsigned short x, unsigned short y) {
     if (command == 'L') {
         turnLeft(rover);
     } else if (command == 'R') {
         turnRight(rover);
     } else if (command == 'M') {
-        moveForwardIfPossible(rover, lst, x, y);
+        moveForwardIfPossible(rover, rover->obstracles, x, y);
     } else if (command == 'B') {
-        moveBackIfPossible(rover, lst, x, y);
+        moveBackIfPossible(rover, rover->obstracles, x, y);
     }
 }

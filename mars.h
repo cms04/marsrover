@@ -1,4 +1,3 @@
-#include "obstraclelist.h"
 #include "rover.h"
 
 typedef struct {
@@ -7,7 +6,6 @@ typedef struct {
     unsigned short* roverYPosition;
     unsigned short* height;
     unsigned short* width;
-    ObstracleList* obstracles;
     Rover* rover;
 } Mars;
 
