@@ -1,17 +1,17 @@
 marsrover: main.o mars.o obstracle.o obstraclelist.o rover.o
 	gcc -Wall -std=c99 -o marsrover main.o mars.o obstracle.o obstraclelist.o rover.o
 
-rover.o: rover.c
-	gcc -Wall -std=c99 -c rover.c
+rover.o: objects/rover.c
+	gcc -Wall -std=c99 -c objects/rover.c
 
-obstracle.o: obstracle.c
-	gcc -Wall -std=c99 -c obstracle.c
+obstracle.o: objects/obstracle.c
+	gcc -Wall -std=c99 -c objects/obstracle.c
 
-obstraclelist.o: obstraclelist.c
-	gcc -Wall -std=c99 -c obstraclelist.c
+obstraclelist.o: objects/obstraclelist.c
+	gcc -Wall -std=c99 -c objects/obstraclelist.c
 
-mars.o: mars.c
-	gcc -Wall -std=c99 -c mars.c
+mars.o: objects/mars.c
+	gcc -Wall -std=c99 -c objects/mars.c
 
 main.o: main.c
 	gcc -Wall -std=c99 -c main.c

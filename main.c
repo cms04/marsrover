@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include "mars.h"
+#include "objects/mars.h"
 
 int main(int argc, char *const *argv) {
     extern char* optarg;
