@@ -1,15 +1,32 @@
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <getopt.h>
 #include "mars.h"
 
-int main(int argc, const char** argv) {
-    const char* befehle;
-    int i;
-    Mars* mars = initalizeMars(20, 80);
-    if (argc == 2) {
-        befehle = *(argv + 1);
-    } else {
-        befehle = "MMMLMMMMMMRBBBBBLMM";
+int main(int argc, char *const *argv) {
+    extern char* optarg;
+    int result = -1, width = 80, height = 20, i;
+    const char* befehle = "MMLBBBBRMM";
+    while ((result = getopt(argc, argv, "b:w:h:")) != -1) {
+        switch (result) {
+            case '?':
+                break;
+            case 'b':
+                befehle = optarg;
+                break;
+            case 'w':
+                width = atoi(optarg);
+                break;
+            case 'h':
+                height = atoi(optarg);
+                break;
+            default:
+                break;
+        }
     }
+    Mars* mars = initalizeMars(height, width);
     printField(mars);
     for (i = 0; i < strlen(befehle); i++) {
         moveRover(mars, *(befehle + i));
