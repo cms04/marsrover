@@ -6,6 +6,21 @@
 #include "objects/mars.h"
 
 void getOptionaleParams(int argc, char *const *argv, int* width, int* height, char* befehle) {
+
+}
+
+void fuehreBefehleAus(Mars* mars, char* befehle) {
+    int i;
+    printField(mars);
+    for (i = 0; i < strlen(befehle); i++) {
+        moveRover(mars, *(befehle + i));
+        printField(mars);
+    }
+}
+
+int main(int argc, char *const *argv) {
+    int width = 80, height = 20;
+    char* befehle = "MMLBBBBRMM";
     extern char* optarg;
     int result = -1;
     while ((result = getopt(argc, argv, "b:w:h:")) != -1) {
@@ -16,28 +31,17 @@ void getOptionaleParams(int argc, char *const *argv, int* width, int* height, ch
                 befehle = optarg;
                 break;
             case 'w':
-                *width = atoi(optarg);
+                width = atoi(optarg);
                 break;
             case 'h':
-                *height = atoi(optarg);
+                height = atoi(optarg);
                 break;
             default:
                 break;
         }
     }
-}
-
-int main(int argc, char *const *argv) {
-    extern char* optarg;
-    int width = 80, height = 20, i;
-    char* befehle = "MMLBBBBRMM";
-    getOptionaleParams(argc, argv, &width, &height, befehle);
     Mars* mars = initalizeMars(height, width);
-    printField(mars);
-    for (i = 0; i < strlen(befehle); i++) {
-        moveRover(mars, *(befehle + i));
-        printField(mars);
-    }
+    fuehreBefehleAus(mars, befehle);
     deleteMars(mars);
     return 0;
 }
