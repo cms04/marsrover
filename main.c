@@ -5,10 +5,9 @@
 #include <getopt.h>
 #include "objects/mars.h"
 
-int main(int argc, char *const *argv) {
+void getOptionaleParams(int argc, char *const *argv, int* width, int* height, char* befehle) {
     extern char* optarg;
-    int result = -1, width = 80, height = 20, i;
-    const char* befehle = "MMLBBBBRMM";
+    int result = -1;
     while ((result = getopt(argc, argv, "b:w:h:")) != -1) {
         switch (result) {
             case '?':
@@ -17,15 +16,22 @@ int main(int argc, char *const *argv) {
                 befehle = optarg;
                 break;
             case 'w':
-                width = atoi(optarg);
+                *width = atoi(optarg);
                 break;
             case 'h':
-                height = atoi(optarg);
+                *height = atoi(optarg);
                 break;
             default:
                 break;
         }
     }
+}
+
+int main(int argc, char *const *argv) {
+    extern char* optarg;
+    int width = 80, height = 20, i;
+    char* befehle = "MMLBBBBRMM";
+    getOptionaleParams(argc, argv, &width, &height, befehle);
     Mars* mars = initalizeMars(height, width);
     printField(mars);
     for (i = 0; i < strlen(befehle); i++) {
