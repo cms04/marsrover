@@ -5,8 +5,32 @@
 #include <getopt.h>
 #include "objects/mars.h"
 
-void getOptionaleParams(int argc, char *const *argv, int* width, int* height, char* befehle) {
-
+char* getOptionaleParams(int argc, char *const *argv, int* width, int* height) {
+    extern char* optarg;
+    char* befehle = NULL;
+    int result = -1;
+    while ((result = getopt(argc, argv, "b:w:h:")) != -1) {
+        switch (result) {
+            case '?':
+                break;
+            case 'b':
+                befehle = optarg;
+                break;
+            case 'w':
+                *width = atoi(optarg);
+                break;
+            case 'h':
+                *height = atoi(optarg);
+                break;
+            default:
+                break;
+        }
+    }
+    if (befehle == NULL) {
+        return "MMLBBBBRMM";
+    } else {
+        return befehle;
+    }
 }
 
 void fuehreBefehleAus(Mars* mars, char* befehle) {
@@ -20,26 +44,7 @@ void fuehreBefehleAus(Mars* mars, char* befehle) {
 
 int main(int argc, char *const *argv) {
     int width = 80, height = 20;
-    char* befehle = "MMLBBBBRMM";
-    extern char* optarg;
-    int result = -1;
-    while ((result = getopt(argc, argv, "b:w:h:")) != -1) {
-        switch (result) {
-            case '?':
-                break;
-            case 'b':
-                befehle = optarg;
-                break;
-            case 'w':
-                width = atoi(optarg);
-                break;
-            case 'h':
-                height = atoi(optarg);
-                break;
-            default:
-                break;
-        }
-    }
+    char* befehle = getOptionaleParams(argc, argv, &width, &height);
     Mars* mars = initalizeMars(height, width);
     fuehreBefehleAus(mars, befehle);
     deleteMars(mars);
