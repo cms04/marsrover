@@ -24,7 +24,7 @@ Wichtige Funktionen der Programmiersprache C, die verwendet werden sollten (scho
 - Eingabe von der Kommandozeile (✔)
 - Eingabe während der Ausführung
 - Strings, insbesondere wesentliche Funktionen der `string.h`-Bibliothek (✔)
-- Unit-Tests mit dem check-Framework
+- Unit-Tests mit dem check-Framework (✔)
 - Arrays, insbesondere 2D-Arrays (✔)
 - Dateihandling (öffnen, lesen, schreiben und schließen)
 - optionale und verpflichende Kommendozeilenargumente (✔)
