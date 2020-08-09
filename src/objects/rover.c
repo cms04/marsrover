@@ -6,10 +6,10 @@ Rover* createRover(unsigned short xpos, unsigned short ypos) {
     Rover* rover = (Rover *) malloc(sizeof(Rover));
     rover->xpos = (unsigned short *) malloc(sizeof(unsigned int));
     rover->ypos = (unsigned short *) malloc(sizeof(unsigned int));
-    rover->direction = (char *) malloc(sizeof(char));
+    rover->direction = (enum Richtung *) malloc(sizeof(enum Richtung));
     *(rover->xpos) = xpos;
     *(rover->ypos) = ypos;
-    *(rover->direction) = '^';
+    *(rover->direction) = NORD;
     return rover;
 }
 
@@ -70,49 +70,49 @@ int isRoverPosition(Rover* rover, unsigned short xpos, unsigned short ypos) {
 }
 
 void turnLeft(Rover* rover) {
-    if (*(rover->direction) == '^') {
-        *(rover->direction) = '<';
-    } else if (*(rover->direction) == '<') {
-        *(rover->direction) = 'v';
-    } else if (*(rover->direction) == 'v') {
-        *(rover->direction) = '>';
-    } else if (*(rover->direction) == '>') {
-        *(rover->direction) = '^';
+    if (*(rover->direction) == NORD) {
+        *(rover->direction) = WEST;
+    } else if (*(rover->direction) == WEST) {
+        *(rover->direction) = SUED;
+    } else if (*(rover->direction) == SUED) {
+        *(rover->direction) = OST;
+    } else if (*(rover->direction) == OST) {
+        *(rover->direction) = NORD;
     }
 }
 
 void turnRight(Rover* rover) {
-    if (*(rover->direction) == '^') {
-        *(rover->direction) = '>';
-    } else if (*(rover->direction) == '>') {
-        *(rover->direction) = 'v';
-    } else if (*(rover->direction) == 'v') {
-        *(rover->direction) = '<';
-    } else if (*(rover->direction) == '<') {
-        *(rover->direction) = '^';
+    if (*(rover->direction) == NORD) {
+        *(rover->direction) = OST;
+    } else if (*(rover->direction) == OST) {
+        *(rover->direction) = SUED;
+    } else if (*(rover->direction) == SUED) {
+        *(rover->direction) = WEST;
+    } else if (*(rover->direction) == WEST) {
+        *(rover->direction) = NORD;
     }
 }
 
 void moveForwardIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
-    if (*(rover->direction) == '^') {
+    if (*(rover->direction) == NORD) {
         moveUpIfPossible(rover, list, y);
-    } else if (*(rover->direction) == '>') {
+    } else if (*(rover->direction) == OST) {
         moveRightIfPossible(rover, list, x);
-    } else if (*(rover->direction) == 'v') {
+    } else if (*(rover->direction) == SUED) {
         moveDownIfPossible(rover, list, y);
-    } else if (*(rover->direction) == '<') {
+    } else if (*(rover->direction) == WEST) {
         moveLeftIfPossible(rover, list, x);
     }
 }
 
 void moveBackIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
-    if (*(rover->direction) == '^') {
+    if (*(rover->direction) == NORD) {
         moveDownIfPossible(rover, list, y);
-    } else if (*(rover->direction) == '>') {
+    } else if (*(rover->direction) == OST) {
         moveLeftIfPossible(rover, list, x);
-    } else if (*(rover->direction) == 'v') {
+    } else if (*(rover->direction) == SUED) {
         moveUpIfPossible(rover, list, y);
-    } else if (*(rover->direction) == '<') {
+    } else if (*(rover->direction) == WEST) {
         moveRightIfPossible(rover, list, x);
     }
 }
@@ -126,5 +126,20 @@ void doCommand(Rover* rover, char command, unsigned short x, unsigned short y) {
         moveForwardIfPossible(rover, rover->obstracles, x, y);
     } else if (command == 'B') {
         moveBackIfPossible(rover, rover->obstracles, x, y);
+    }
+}
+
+char printRover(Rover* rover) {
+    switch (*(rover->direction)) {
+        case NORD:
+            return '^';
+        case OST:
+            return '>';
+        case SUED:
+            return 'v';
+        case WEST:
+            return '<';
+        default:
+            return ' ';
     }
 }

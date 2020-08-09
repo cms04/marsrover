@@ -13,7 +13,7 @@ void printField(Mars* mars) {
     for (i = 0; i < *(mars->height); i++) {
         for (j = 0; j < *(mars->width); j++) {
             if (isRoverPosition(mars->rover, j, i)) {
-                printf("%c", *(mars->rover->direction));
+                printf("%c", printRover(mars->rover));
             } else {
                 printf("%c", *(*(mars->oberflaeche + i) + j));
             }

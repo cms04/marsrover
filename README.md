@@ -35,9 +35,9 @@ Wichtige Funktionen der Programmiersprache C, die verwendet werden sollten (scho
 - Verlinken mehrerer C-Dateien (✔)
 - Debuggen mit `gdb`
 - Eigene Datentypen definieren (✔)
-- Kurznamen für Datentypen vergeben
+- Kurznamen für Datentypen vergeben (✔)
 - Punkt- und Pfeiloperator (✔)
-- Enums, Unions und Bitfelder
+- Enums, Unions und Bitfelder (✔)
 - Rekursive Structs (✔)
 - Verkettete Listen (✔)
 - Manuelle Speicherverwaltung mit `malloc`, `realloc` und `free` (✔)
