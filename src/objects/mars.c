@@ -62,8 +62,6 @@ Mars* initalizeMars(unsigned short height, unsigned short width) {
             *(*(mars->oberflaeche + i) + j) = ' ';
         }
     }
-    mars->roverXPosition = (unsigned short *) malloc(sizeof(unsigned short));
-    mars->roverYPosition = (unsigned short *) malloc(sizeof(unsigned short));
     mars->height = (unsigned short *) malloc(sizeof(unsigned short));
     mars->width = (unsigned short *) malloc(sizeof(unsigned short));
     *(mars->height) = height;
@@ -79,8 +77,6 @@ void deleteMars(Mars* mars) {
         free(*(mars->oberflaeche + i));
     }
     free(mars->oberflaeche);
-    free(mars->roverXPosition);
-    free(mars->roverYPosition);
     free(mars->height);
     free(mars->width);
     deleteRover(mars->rover);

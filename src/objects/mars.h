@@ -2,8 +2,6 @@
 
 typedef struct {
     char** oberflaeche;
-    unsigned short* roverXPosition;
-    unsigned short* roverYPosition;
     unsigned short* height;
     unsigned short* width;
     Rover* rover;
