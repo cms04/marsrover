@@ -57,8 +57,8 @@ void moveLeftIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) 
 
 void moveRightIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
     unsigned short newx = *(rover->xpos) + 1, newy = *(rover->ypos);
-    if (newy >= dimx) {
-        newy = 0;
+    if (newx >= dimx) {
+        newx = 0;
     }
     if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->xpos) = newx;
