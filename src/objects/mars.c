@@ -55,7 +55,7 @@ void putRover(Mars* mars) {
 Mars* initalizeMars(unsigned short height, unsigned short width) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
     unsigned short i, j;
-    mars->oberflaeche = (char**) malloc(height * width * sizeof(char));
+    mars->oberflaeche = (char**) malloc(height * sizeof(char *));
     for (i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
         for (j = 0; j < width; j++) {
