@@ -5,7 +5,8 @@
 #include <getopt.h>
 #include "objects/mars.h"
 
-char* getOptionaleParams(int argc, char *const *argv, int* width, int* height, int* live) {
+char* getOptionaleParams(int argc, char *const *argv, unsigned short* width,
+        unsigned short* height, unsigned short* live) {
     extern char* optarg;
     char* befehle = NULL;
     int result = -1;
@@ -59,7 +60,7 @@ void nehmeLiveBefehleEntgegen(Mars* mars) {
 }
 
 int main(int argc, char *const *argv) {
-    int width = 80, height = 20, live = 0;
+    unsigned short width = 80, height = 20, live = 0;
     char* befehle = getOptionaleParams(argc, argv, &width, &height, &live);
     Mars* mars = initalizeMars(height, width);
     if (live) {
