@@ -6,16 +6,18 @@
 #include "objects/mars.h"
 
 char* getOptionaleParams(int argc, char *const *argv, unsigned short* width,
-        unsigned short* height, unsigned short* live) {
+        unsigned short* height, unsigned short* live, unsigned short* inputs,
+        unsigned short* helptext) {
     extern char* optarg;
     char* befehle = NULL;
     int result = -1;
-    while ((result = getopt(argc, argv, "b:w:h:l")) != -1) {
+    while ((result = getopt(argc, argv, "b:w:h:lm")) != -1) {
         switch (result) {
             case '?':
                 break;
             case 'b':
                 befehle = optarg;
+                *inputs += 1;
                 break;
             case 'w':
                 *width = atoi(optarg);
@@ -25,6 +27,10 @@ char* getOptionaleParams(int argc, char *const *argv, unsigned short* width,
                 break;
             case 'l':
                 *live = 1;
+                *inputs += 1;
+                break;
+            case 'm':
+                *helptext = 1;
                 break;
             default:
                 break;
@@ -59,9 +65,32 @@ void nehmeLiveBefehleEntgegen(Mars* mars) {
     printf("Programm wird beendet...\n");
 }
 
+void showHelp() {
+    printf("MARS-ROVER\n\n");
+    printf("Optionale Parameter:\n");
+    printf("\t-b\tEine Zeichenkette von Befehlen, bestehend aus den Zeichen L (nach links\n");
+    printf("\t\tdrehen), R (nach rechts drehen), M (nach vorne bewegen), B (Rückwärtsgang)\n");
+    printf("\t-w\tEine positive Zahl, die die Breite des Feldes angibt\n");
+    printf("\t-h\tEine positive Zahl, die die Höhe des Feldes angibt\n");
+    printf("\t-l\tLive-Eingabe aktivieren: Wird dieser Parameter gesetzt, kann der Rover\n");
+    printf("\t\tper Live-Eingabe direkt vom Nutzer gesteuert werden.\n");
+    printf("\nDie Parameter -l und -b dürfen nicht gemeinsam benutzt werden!\n");
+    printf("\nWerden keine Parameter angegeben, startet das Programm standardmäßig mit\n");
+    printf("einer Breite von 80 Zeichen, einer Länge von 20 Zeichen und der Befehlsfolge\n");
+    printf("MMLBBBBRMM.\n");
+}
+
 int main(int argc, char *const *argv) {
-    unsigned short width = 80, height = 20, live = 0;
-    char* befehle = getOptionaleParams(argc, argv, &width, &height, &live);
+    unsigned short width = 80, height = 20, live = 0, inputs = 0, helptext = 0;
+    char* befehle = getOptionaleParams(argc, argv, &width, &height, &live, &inputs, &helptext);
+    if (inputs > 1) {
+        fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
+        return 1;
+    }
+    if (helptext == 1) {
+        showHelp();
+        return 0;
+    }
     Mars* mars = initalizeMars(height, width);
     if (live) {
         nehmeLiveBefehleEntgegen(mars);
