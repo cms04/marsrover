@@ -117,3 +117,13 @@ void deleteMars(Mars* mars) {
     deleteRover(mars->rover);
     free(mars);
 }
+
+void saveMars(FILE *output, Mars* mars) {
+    fprintf(output, "%d %d\n", *(mars->height), *(mars->width));
+    for (int i = 0; i < *(mars->height); i++) {
+        for (int j = 0; j < *(mars->width); j++) {
+            fprintf(output, "%c", *(*(mars->oberflaeche + i) + j));
+        }
+        fprintf(output, "\n");
+    }
+}

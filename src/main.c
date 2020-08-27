@@ -44,11 +44,11 @@ void showHelp() {
 
 int main(int argc, char *const *argv) {
     unsigned short width = 80, height = 20, live = 0, inputs = 0;
-    FILE *input = NULL;
+    FILE *input = NULL, *output = NULL;
     char* befehle = "MMLBBBBRMM";
     extern char* optarg;
     int result = -1;
-    while ((result = getopt(argc, argv, "b:w:h:lmf:")) != -1) {
+    while ((result = getopt(argc, argv, "b:w:h:lmf:o:")) != -1) {
         switch (result) {
             case 'b':
                 befehle = optarg;
@@ -74,11 +74,23 @@ int main(int argc, char *const *argv) {
                     return 2;
                 }
                 break;
+            case 'o':
+                output = fopen(optarg, "w");
+                if (output == NULL) {
+                    fprintf(stderr, "FEHLER: Ausgabedatei konnte nicht geöffnet werden.\n");
+                    return 2;
+                }
+                break;
         }
     }
     if (inputs > 1) {
         fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
-        fclose(input);
+        if (input != NULL) {
+            fclose(input);
+        }
+        if (output != NULL) {
+            fclose(output);
+        }
         return 1;
     }
     Mars* mars;
@@ -92,6 +104,10 @@ int main(int argc, char *const *argv) {
         nehmeLiveBefehleEntgegen(mars);
     } else {
         fuehreBefehleAus(mars, befehle);
+    }
+    if (output != NULL) {
+        saveMars(output, mars);
+        fclose(output);
     }
     deleteMars(mars);
     return 0;

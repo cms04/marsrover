@@ -12,3 +12,4 @@ Mars* initalizeMars(unsigned short, unsigned short);
 void deleteMars(Mars*);
 void moveRover(Mars*, char);
 Mars* initializeWithFile(FILE *input);
+void saveMars(FILE *output, Mars* mars);

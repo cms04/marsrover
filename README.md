@@ -10,7 +10,9 @@ Optionale Parameter:
 - `-w`: Eine positive Zahl, die die Breite des Feldes angibt
 - `-h`: Eine positive Zahl, die die Höhe des Feldes angibt
 - `-l`: Live-Eingabe aktivieren: Wird dieser Parameter gesetzt, kann der Rover per Live-Eingabe direkt vom Nutzer gesteuert werden.
-- `-m`: Hilfe
+- `-o`: Ausgabedatei, in der die Mars-Map gespeichert wird
+- `-f`: Eingabedatei, die aus einem mit `-o` gestarteten Aufruf erzeugt wurde
+- `-m`: Diese Hilfe anzeigen
 
 Die Parameter `-b` und `-l` dürfen nicht gemeinsam benutzt werden!
 
@@ -24,6 +26,8 @@ Optional parameters:
 - `-w`: The width of the mars map (unsigned int)
 - `-h`: The height of the mars map (unsigned int)
 - `-l`: Activates live input: If you set this parameter, the string of `-b` (or the default commands) will be ignored and you can enter commands (same commands as above plus `x` to terminate the program) in real time.
+- `-o`: Output file where the mars map is saved in
+- `-f`: Input file that was created by an program execution with `-o`
 - `-m`: Help
 
 You must not use `-l` and `-b` together!
