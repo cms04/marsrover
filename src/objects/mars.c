@@ -87,13 +87,14 @@ Mars* initializeWithFile(FILE *input) {
     *(mars->width) = width;
     putRover(mars);
     char *inputline = (char *) malloc((width * sizeof(char)) + 1);
-    *(inputline + width) = '\0';
     mars->oberflaeche = (char**) malloc(height * sizeof(char *));
     ObstracleList* obstracles = create();
     mars->rover->obstracles = obstracles;
     for (i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
         fgets(inputline, width, input);
+        fgets(inputline, width, input);
+        *(inputline + width) = '\0';
         for (j = 0; j < width; j++) {
             *(*(mars->oberflaeche + i) + j) = *(inputline + j);
             if (*(inputline + j) == '#') {
