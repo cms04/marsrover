@@ -78,6 +78,7 @@ int main(int argc, char *const *argv) {
     }
     if (inputs > 1) {
         fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
+        fclose(input);
         return 1;
     }
     Mars* mars;
