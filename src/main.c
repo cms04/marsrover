@@ -42,6 +42,31 @@ void showHelp() {
     printf("MMLBBBBRMM.\n");
 }
 
+Mars* initMars(int height, int width, FILE *input) {
+    Mars* mars;
+    if (input == NULL) {
+        mars = initalizeMars(height, width);
+    } else {
+        mars = initializeWithFile(input);
+        fclose(input);
+    }
+    return mars;
+}
+
+int verifyInputs(int inputs, FILE *input, FILE *output) {
+    if (inputs > 1) {
+        fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
+        if (input != NULL) {
+            fclose(input);
+        }
+        if (output != NULL) {
+            fclose(output);
+        }
+        return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char *const *argv) {
     unsigned short width = 80, height = 20, live = 0, inputs = 0;
     FILE *input = NULL, *output = NULL;
@@ -83,23 +108,10 @@ int main(int argc, char *const *argv) {
                 break;
         }
     }
-    if (inputs > 1) {
-        fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
-        if (input != NULL) {
-            fclose(input);
-        }
-        if (output != NULL) {
-            fclose(output);
-        }
+    if (verifyInputs(inputs, input, output)) {
         return 1;
     }
-    Mars* mars;
-    if (input == NULL) {
-        mars = initalizeMars(height, width);
-    } else {
-        mars = initializeWithFile(input);
-        fclose(input);
-    }
+    Mars* mars = initMars(height, width, input);
     if (live) {
         nehmeLiveBefehleEntgegen(mars);
     } else {

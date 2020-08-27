@@ -30,6 +30,11 @@ void moveRover(Mars* mars, char command) {
     doCommand(mars->rover, command, *(mars->width), *(mars->height));
 }
 
+void putObstracle(ObstracleList* list, unsigned short height, unsigned short width) {
+    Hindernis* obs = createHindernis(height, width);
+    insertToList(list, obs);
+}
+
 void putRandomObstracles(Mars* mars) {
     ObstracleList* obstracles = create();
     unsigned short i, j;
@@ -39,17 +44,11 @@ void putRandomObstracles(Mars* mars) {
         for (j = 0; j < *(mars->width); j++) {
             if (rand() % 5 == 0 && (j != *(mars->width) / 2 || i != *(mars->height) / 2)) {
                 *(*(mars->oberflaeche + i) + j) = '#';
-                Hindernis* obs = createHindernis(j, i);
-                insertToList(obstracles, obs);
+                putObstracle(obstracles, j, i);
             }
         }
     }
     mars->rover->obstracles = obstracles;
-}
-
-void putObstracle(ObstracleList* list, unsigned short height, unsigned short width) {
-    Hindernis* obs = createHindernis(height, width);
-    insertToList(list, obs);
 }
 
 void putRover(Mars* mars) {
@@ -57,21 +56,25 @@ void putRover(Mars* mars) {
     mars->rover = createRover(xpos, ypos);
 }
 
+void saveBasicSettings(Mars* mars, unsigned short height, unsigned short width) {
+    mars->oberflaeche = (char**) malloc(height * sizeof(char *));
+    mars->height = (unsigned short *) malloc(sizeof(unsigned short));
+    mars->width = (unsigned short *) malloc(sizeof(unsigned short));
+    *(mars->height) = height;
+    *(mars->width) = width;
+    putRover(mars);
+}
+
 Mars* initalizeMars(unsigned short height, unsigned short width) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
+    saveBasicSettings(mars, height, width);
     unsigned short i, j;
-    mars->oberflaeche = (char**) malloc(height * sizeof(char *));
     for (i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
         for (j = 0; j < width; j++) {
             *(*(mars->oberflaeche + i) + j) = ' ';
         }
     }
-    mars->height = (unsigned short *) malloc(sizeof(unsigned short));
-    mars->width = (unsigned short *) malloc(sizeof(unsigned short));
-    *(mars->height) = height;
-    *(mars->width) = width;
-    putRover(mars);
     putRandomObstracles(mars);
     return mars;
 }
@@ -81,13 +84,8 @@ Mars* initializeWithFile(FILE *input) {
     unsigned short i, j;
     unsigned short height = 0, width = 0;
     fscanf(input, "%hd %hd", &height, &width);
-    mars->height = (unsigned short *) malloc(sizeof(unsigned short));
-    mars->width = (unsigned short *) malloc(sizeof(unsigned short));
-    *(mars->height) = height;
-    *(mars->width) = width;
-    putRover(mars);
+    saveBasicSettings(mars, height, width);
     char *inputline = (char *) malloc((width * sizeof(char)) + 1);
-    mars->oberflaeche = (char**) malloc(height * sizeof(char *));
     ObstracleList* obstracles = create();
     for (i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
