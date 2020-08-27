@@ -15,3 +15,16 @@ mars.o: src/objects/mars.c
 
 main.o: src/main.c
 	gcc -Wall -std=c99 -c src/main.c
+
+clean:
+	rm -f *.o marsrover
+	rm -f obstracletest 
+
+check:
+	checkmk test/obstracle_test.ts > test/obstracle_test.c
+
+build: check
+	gcc -Wall -std=c99 -o obstracletest test/obstracle_test.c src/objects/obstracle.c `pkg-config --cflags --libs check`
+
+test: build
+	./obstracletest
