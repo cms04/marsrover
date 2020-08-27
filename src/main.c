@@ -5,44 +5,6 @@
 #include <getopt.h>
 #include "objects/mars.h"
 
-char* getOptionaleParams(int argc, char *const *argv, unsigned short* width,
-        unsigned short* height, unsigned short* live, unsigned short* inputs,
-        unsigned short* helptext) {
-    extern char* optarg;
-    char* befehle = NULL;
-    int result = -1;
-    while ((result = getopt(argc, argv, "b:w:h:lm")) != -1) {
-        switch (result) {
-            case '?':
-                break;
-            case 'b':
-                befehle = optarg;
-                *inputs += 1;
-                break;
-            case 'w':
-                *width = atoi(optarg);
-                break;
-            case 'h':
-                *height = atoi(optarg);
-                break;
-            case 'l':
-                *live = 1;
-                *inputs += 1;
-                break;
-            case 'm':
-                *helptext = 1;
-                break;
-            default:
-                break;
-        }
-    }
-    if (befehle == NULL) {
-        return "MMLBBBBRMM";
-    } else {
-        return befehle;
-    }
-}
-
 void fuehreBefehleAus(Mars* mars, char* befehle) {
     int i;
     printField(mars);
@@ -81,15 +43,34 @@ void showHelp() {
 }
 
 int main(int argc, char *const *argv) {
-    unsigned short width = 80, height = 20, live = 0, inputs = 0, helptext = 0;
-    char* befehle = getOptionaleParams(argc, argv, &width, &height, &live, &inputs, &helptext);
+    unsigned short width = 80, height = 20, live = 0, inputs = 0;
+    char* befehle = "MMLBBBBRMM";
+    extern char* optarg;
+    int result = -1;
+    while ((result = getopt(argc, argv, "b:w:h:lm")) != -1) {
+        switch (result) {
+            case 'b':
+                befehle = optarg;
+                inputs += 1;
+                break;
+            case 'w':
+                width = atoi(optarg);
+                break;
+            case 'h':
+                height = atoi(optarg);
+                break;
+            case 'l':
+                live = 1;
+                inputs += 1;
+                break;
+            case 'm':
+                showHelp();
+                return 0;
+        }
+    }
     if (inputs > 1) {
         fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
         return 1;
-    }
-    if (helptext == 1) {
-        showHelp();
-        return 0;
     }
     Mars* mars = initalizeMars(height, width);
     if (live) {
