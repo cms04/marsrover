@@ -83,24 +83,20 @@ Mars* initializeWithFile(FILE *input) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
     unsigned short i, j;
     unsigned short height = 0, width = 0;
-    fscanf(input, "%hd %hd", &height, &width);
+    fread(&height, sizeof(unsigned short), 1, input);
+    fread(&width, sizeof(unsigned short), 1, input);
     saveBasicSettings(mars, height, width);
-    char *inputline = (char *) malloc((width * sizeof(char)) + 1);
     ObstracleList* obstracles = create();
     for (i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
-        fgets(inputline, width, input);
-        fgets(inputline, width, input);
-        *(inputline + width) = '\0';
         for (j = 0; j < width; j++) {
-            *(*(mars->oberflaeche + i) + j) = *(inputline + j);
-            if (*(inputline + j) == '#') {
+            fread(*(mars->oberflaeche + i) + j, sizeof(unsigned char), 1, input);
+            if (*(*(mars->oberflaeche + i) + j) == '#') {
                 putObstracle(obstracles, j, i);
             }
         }
     }
     mars->rover->obstracles = obstracles;
-    free(inputline);
     return mars;
 }
 
@@ -117,11 +113,11 @@ void deleteMars(Mars* mars) {
 }
 
 void saveMars(FILE *output, Mars* mars) {
-    fprintf(output, "%d %d\n", *(mars->height), *(mars->width));
+    fwrite(mars->height, sizeof(unsigned short), 1, output);
+    fwrite(mars->width, sizeof(unsigned short), 1, output);
     for (int i = 0; i < *(mars->height); i++) {
         for (int j = 0; j < *(mars->width); j++) {
-            fprintf(output, "%c", *(*(mars->oberflaeche + i) + j));
+            fwrite(*(mars->oberflaeche + i) + j, sizeof(char), 1, output);
         }
-        fprintf(output, "\n");
     }
 }

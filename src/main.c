@@ -102,7 +102,7 @@ int main(int argc, char *const *argv) {
         fuehreBefehleAus(mars, befehle);
     }
     if (output != NULL) {
-        FILE *datei = fopen(output, "w");
+        FILE *datei = fopen(output, "wb");
         saveMars(datei, mars);
         fclose(datei);
     }
