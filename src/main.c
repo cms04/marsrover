@@ -42,34 +42,21 @@ void showHelp() {
     printf("MMLBBBBRMM.\n");
 }
 
-Mars* initMars(int height, int width, FILE *input) {
+Mars* initMars(int height, int width, char *input) {
     Mars* mars;
     if (input == NULL) {
         mars = initalizeMars(height, width);
     } else {
-        mars = initializeWithFile(input);
-        fclose(input);
+        FILE *datei = fopen(input, "r");
+        mars = initializeWithFile(datei);
+        fclose(datei);
     }
     return mars;
 }
 
-int verifyInputs(int inputs, FILE *input, FILE *output) {
-    if (inputs > 1) {
-        fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
-        if (input != NULL) {
-            fclose(input);
-        }
-        if (output != NULL) {
-            fclose(output);
-        }
-        return 1;
-    }
-    return 0;
-}
-
 int main(int argc, char *const *argv) {
     unsigned short width = 80, height = 20, live = 0, inputs = 0;
-    FILE *input = NULL, *output = NULL;
+    char *input = NULL, *output = NULL;
     char* befehle = "MMLBBBBRMM";
     extern char* optarg;
     int result = -1;
@@ -93,23 +80,20 @@ int main(int argc, char *const *argv) {
                 showHelp();
                 return 0;
             case 'f':
-                input = fopen(optarg, "r");
-                if (input == NULL) {
-                    fprintf(stderr, "FEHLER: Eingabedatei konnte nicht geöffnet werden.\n");
-                    return 2;
-                }
+                input = optarg;
                 break;
             case 'o':
-                output = fopen(optarg, "w");
-                if (output == NULL) {
-                    fprintf(stderr, "FEHLER: Ausgabedatei konnte nicht geöffnet werden.\n");
-                    return 2;
-                }
+                output = optarg;
                 break;
         }
     }
-    if (verifyInputs(inputs, input, output)) {
+    if (inputs > 1) {
+        fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
         return 1;
+    }
+    if (input != NULL && output != NULL && strcmp(input, output) == 0) {
+        fprintf(stderr, "FEHLER: Eingabe- und Ausgabedatei können nicht identisch sein!\n");
+        return 2;
     }
     Mars* mars = initMars(height, width, input);
     if (live) {
@@ -118,8 +102,9 @@ int main(int argc, char *const *argv) {
         fuehreBefehleAus(mars, befehle);
     }
     if (output != NULL) {
-        saveMars(output, mars);
-        fclose(output);
+        FILE *datei = fopen(output, "w");
+        saveMars(datei, mars);
+        fclose(datei);
     }
     deleteMars(mars);
     return 0;
