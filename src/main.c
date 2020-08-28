@@ -1,4 +1,3 @@
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,22 +39,6 @@ void showHelp() {
     printf("\nWerden keine Parameter angegeben, startet das Programm standardmäßig mit\n");
     printf("einer Breite von 80 Zeichen, einer Länge von 20 Zeichen und der Befehlsfolge\n");
     printf("MMLBBBBRMM.\n");
-}
-
-Mars* initMars(int height, int width, char *input) {
-    Mars* mars;
-    if (input == NULL) {
-        mars = initalizeMars(height, width);
-    } else {
-        FILE *datei = fopen(input, "rb");
-        if (datei == NULL) {
-            fprintf(stderr, "FEHLER: Eingabedatei konnte nicht geöffnet werden!\n");
-            return NULL;
-        }
-        mars = initializeWithFile(datei);
-        fclose(datei);
-    }
-    return mars;
 }
 
 int main(int argc, char *const *argv) {

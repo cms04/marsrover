@@ -100,6 +100,22 @@ Mars* initializeWithFile(FILE *input) {
     return mars;
 }
 
+Mars* initMars(unsigned short height, unsigned short width, char *input) {
+    Mars* mars;
+    if (input == NULL) {
+        mars = initalizeMars(height, width);
+    } else {
+        FILE *datei = fopen(input, "rb");
+        if (datei == NULL) {
+            fprintf(stderr, "FEHLER: Eingabedatei konnte nicht geöffnet werden!\n");
+            return NULL;
+        }
+        mars = initializeWithFile(datei);
+        fclose(datei);
+    }
+    return mars;
+}
+
 void deleteMars(Mars* mars) {
     unsigned short i;
     for (i = 0; i < *(mars->height); i++) {
