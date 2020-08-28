@@ -90,8 +90,11 @@ Mars* initializeWithFile(FILE *input) {
     for (i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
         for (j = 0; j < width; j++) {
-            fread(*(mars->oberflaeche + i) + j, sizeof(unsigned char), 1, input);
-            if (*(*(mars->oberflaeche + i) + j) == '#') {
+            char tmp;
+            fread(&tmp, sizeof(unsigned char), 1, input);
+            tmp += 10;
+            *(*(mars->oberflaeche + i) + j) = tmp;
+            if (tmp == '#') {
                 putObstracle(obstracles, j, i);
             }
         }
@@ -133,7 +136,8 @@ void saveMars(FILE *output, Mars* mars) {
     fwrite(mars->width, sizeof(unsigned short), 1, output);
     for (int i = 0; i < *(mars->height); i++) {
         for (int j = 0; j < *(mars->width); j++) {
-            fwrite(*(mars->oberflaeche + i) + j, sizeof(char), 1, output);
+            char tmp = *(*(mars->oberflaeche + i) + j) - 10;
+            fwrite(&tmp, sizeof(char), 1, output);
         }
     }
 }
