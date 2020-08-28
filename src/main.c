@@ -47,7 +47,11 @@ Mars* initMars(int height, int width, char *input) {
     if (input == NULL) {
         mars = initalizeMars(height, width);
     } else {
-        FILE *datei = fopen(input, "r");
+        FILE *datei = fopen(input, "rb");
+        if (datei == NULL) {
+            fprintf(stderr, "FEHLER: Eingabedatei konnte nicht geöffnet werden!\n");
+            return NULL;
+        }
         mars = initializeWithFile(datei);
         fclose(datei);
     }
@@ -91,21 +95,28 @@ int main(int argc, char *const *argv) {
         fprintf(stderr, "FEHLER: Bitte nur eine Eingabequelle angeben!\n");
         return 1;
     }
-    if (input != NULL && output != NULL && strcmp(input, output) == 0) {
-        fprintf(stderr, "FEHLER: Eingabe- und Ausgabedatei können nicht identisch sein!\n");
+    Mars* mars = initMars(height, width, input);
+    if (mars != NULL) {
+        if (live) {
+            nehmeLiveBefehleEntgegen(mars);
+        } else {
+            fuehreBefehleAus(mars, befehle);
+        }
+        if (output != NULL) {
+            FILE *datei = fopen(output, "wb");
+            if (datei != NULL) {
+                saveMars(datei, mars);
+                fclose(datei);
+            } else {
+                printf("FEHLER: Ausgabedatei konnte nicht geöffnet werden!\n");
+                deleteMars(mars);
+                return 3;
+            }
+        }
+        deleteMars(mars);
+    } else {
+        fprintf(stderr, "FEHLER: Speicherallokation fehlgeschlagen!\n");
         return 2;
     }
-    Mars* mars = initMars(height, width, input);
-    if (live) {
-        nehmeLiveBefehleEntgegen(mars);
-    } else {
-        fuehreBefehleAus(mars, befehle);
-    }
-    if (output != NULL) {
-        FILE *datei = fopen(output, "wb");
-        saveMars(datei, mars);
-        fclose(datei);
-    }
-    deleteMars(mars);
     return 0;
 }
