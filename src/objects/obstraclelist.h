@@ -7,4 +7,4 @@ typedef struct {
 ObstracleList* create();
 void insertToList(ObstracleList*, Hindernis*);
 void deleteAll(ObstracleList*);
-int contains(ObstracleList*, unsigned short, unsigned short);
+int contains(ObstracleList*, unsigned short x, unsigned short y);

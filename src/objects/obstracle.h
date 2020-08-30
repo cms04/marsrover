@@ -4,6 +4,6 @@ typedef struct Hindernis {
     struct Hindernis* next;
 } Hindernis;
 
-Hindernis* createHindernis(unsigned short, unsigned short);
+Hindernis* createHindernis(unsigned short x, unsigned short y);
 void delete(Hindernis*);
-int equals(Hindernis*, unsigned short, unsigned short);
+int equals(Hindernis*, unsigned short x, unsigned short y);

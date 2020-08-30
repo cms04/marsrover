@@ -21,19 +21,15 @@ void deleteRover(Rover* rover) {
     free(rover);
 }
 
-void moveUpIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
+static void moveUpIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
     unsigned short newx = *(rover->xpos), newy;
-    if (*(rover->ypos) == 0) {
-        newy = dimy - 1;
-    } else {
-        newy = *(rover->ypos) - 1;
-    }
+    newy = *(rover->ypos) == 0 ? dimy - 1 : *(rover->ypos) - 1;
     if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->ypos) = newy;
     }
 }
 
-void moveDownIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
+static void moveDownIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) {
     unsigned short newx = *(rover->xpos), newy = *(rover->ypos) + 1;
     if (newy >= dimy) {
         newy = 0;
@@ -43,19 +39,15 @@ void moveDownIfPossible(Rover* rover, ObstracleList* list, unsigned short dimy) 
     }
 }
 
-void moveLeftIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
+static void moveLeftIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
     unsigned short newx, newy = *(rover->ypos);
-    if (*(rover->xpos) == 0) {
-        newx = dimx - 1;
-    } else {
-        newx = *(rover->xpos) - 1;
-    }
+    newx = *(rover->xpos) == 0 ? dimx - 1 : *(rover->xpos) - 1;
     if (contains(rover->obstracles, newx, newy) == 0) {
         *(rover->xpos) = newx;
     }
 }
 
-void moveRightIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
+static void moveRightIfPossible(Rover* rover, ObstracleList* list, unsigned short dimx) {
     unsigned short newx = *(rover->xpos) + 1, newy = *(rover->ypos);
     if (newx >= dimx) {
         newx = 0;
@@ -69,7 +61,7 @@ int isRoverPosition(Rover* rover, unsigned short xpos, unsigned short ypos) {
     return (*(rover->xpos) == xpos) && (*(rover->ypos) == ypos);
 }
 
-void turnLeft(Rover* rover) {
+static void turnLeft(Rover* rover) {
     if (*(rover->direction) == NORD) {
         *(rover->direction) = WEST;
     } else if (*(rover->direction) == WEST) {
@@ -81,7 +73,7 @@ void turnLeft(Rover* rover) {
     }
 }
 
-void turnRight(Rover* rover) {
+static void turnRight(Rover* rover) {
     if (*(rover->direction) == NORD) {
         *(rover->direction) = OST;
     } else if (*(rover->direction) == OST) {
@@ -93,7 +85,7 @@ void turnRight(Rover* rover) {
     }
 }
 
-void moveForwardIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
+static void moveForwardIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
     if (*(rover->direction) == NORD) {
         moveUpIfPossible(rover, list, y);
     } else if (*(rover->direction) == OST) {
@@ -105,7 +97,7 @@ void moveForwardIfPossible(Rover* rover, ObstracleList* list, unsigned short x, 
     }
 }
 
-void moveBackIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
+static void moveBackIfPossible(Rover* rover, ObstracleList* list, unsigned short x, unsigned short y) {
     if (*(rover->direction) == NORD) {
         moveDownIfPossible(rover, list, y);
     } else if (*(rover->direction) == OST) {

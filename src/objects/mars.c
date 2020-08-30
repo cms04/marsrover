@@ -3,39 +3,39 @@
 #include <time.h>
 #include "mars.h"
 
+static void printBorders(unsigned short width) {
+    int i;
+    for (i = 0; i < width; i++) {
+        printf("=");
+    }
+    printf("\n");
+}
+
 void printField(Mars* mars) {
     unsigned short i, j;
     printf("\n");
-    for (i = 0; i < *(mars->width); i++) {
-        printf("=");
-    }
-    printf("\n");
+    printBorders(*(mars->width));
     for (i = 0; i < *(mars->height); i++) {
         for (j = 0; j < *(mars->width); j++) {
-            if (isRoverPosition(mars->rover, j, i)) {
-                printf("%c", printRover(mars->rover));
-            } else {
-                printf("%c", *(*(mars->oberflaeche + i) + j));
-            }
+            isRoverPosition(mars->rover, j, i)
+                ? printf("%c", printRover(mars->rover))
+                : printf("%c", *(*(mars->oberflaeche + i) + j));
         }
         printf("\n");
     }
-    for (i = 0; i < *(mars->width); i++) {
-        printf("=");
-    }
-    printf("\n");
+    printBorders(*(mars->width));
 }
 
 void moveRover(Mars* mars, char command) {
     doCommand(mars->rover, command, *(mars->width), *(mars->height));
 }
 
-void putObstracle(ObstracleList* list, unsigned short height, unsigned short width) {
+static void putObstracle(ObstracleList* list, unsigned short height, unsigned short width) {
     Hindernis* obs = createHindernis(height, width);
     insertToList(list, obs);
 }
 
-void putRandomObstracles(Mars* mars) {
+static void putRandomObstracles(Mars* mars) {
     ObstracleList* obstracles = create();
     unsigned short i, j;
     time_t t;
@@ -51,12 +51,12 @@ void putRandomObstracles(Mars* mars) {
     mars->rover->obstracles = obstracles;
 }
 
-void putRover(Mars* mars) {
+static void putRover(Mars* mars) {
     unsigned short xpos = *(mars->width) / 2, ypos = *(mars->height) / 2;
     mars->rover = createRover(xpos, ypos);
 }
 
-void saveBasicSettings(Mars* mars, unsigned short height, unsigned short width) {
+static void saveBasicSettings(Mars* mars, unsigned short height, unsigned short width) {
     mars->oberflaeche = (char**) malloc(height * sizeof(char *));
     mars->height = (unsigned short *) malloc(sizeof(unsigned short));
     mars->width = (unsigned short *) malloc(sizeof(unsigned short));
@@ -65,7 +65,7 @@ void saveBasicSettings(Mars* mars, unsigned short height, unsigned short width) 
     putRover(mars);
 }
 
-Mars* initalizeMars(unsigned short height, unsigned short width) {
+static Mars* initalizeMars(unsigned short height, unsigned short width) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
     saveBasicSettings(mars, height, width);
     unsigned short i, j;
@@ -79,7 +79,7 @@ Mars* initalizeMars(unsigned short height, unsigned short width) {
     return mars;
 }
 
-Mars* initializeWithFile(FILE *input) {
+static Mars* initializeWithFile(FILE *input) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
     unsigned short i, j;
     unsigned short height = 0, width = 0;
@@ -107,15 +107,15 @@ Mars* initMars(unsigned short height, unsigned short width, char *input) {
     Mars* mars;
     if (input == NULL) {
         mars = initalizeMars(height, width);
-    } else {
-        FILE *datei = fopen(input, "rb");
-        if (datei == NULL) {
-            fprintf(stderr, "FEHLER: Eingabedatei konnte nicht geöffnet werden!\n");
-            return NULL;
-        }
-        mars = initializeWithFile(datei);
-        fclose(datei);
+        return mars;
     }
+    FILE *datei = fopen(input, "rb");
+    if (datei == NULL) {
+        fprintf(stderr, "FEHLER: Eingabedatei konnte nicht geöffnet werden!\n");
+        return NULL;
+    }
+    mars = initializeWithFile(datei);
+    fclose(datei);
     return mars;
 }
 

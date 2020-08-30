@@ -9,6 +9,6 @@ typedef struct {
 
 void printField(Mars*);
 void deleteMars(Mars*);
-void moveRover(Mars*, char);
-void saveMars(FILE *output, Mars* mars);
-Mars* initMars(unsigned short height, unsigned short width, char *input);
+void moveRover(Mars*, char command);
+void saveMars(FILE* outputfile, Mars*);
+Mars* initMars(unsigned short height, unsigned short width, char* inputfilename);

@@ -4,7 +4,7 @@
 #include <getopt.h>
 #include "objects/mars.h"
 
-void fuehreBefehleAus(Mars* mars, char* befehle) {
+static void fuehreBefehleAus(Mars* mars, char* befehle) {
     int i;
     printField(mars);
     for (i = 0; i < strlen(befehle); i++) {
@@ -13,7 +13,7 @@ void fuehreBefehleAus(Mars* mars, char* befehle) {
     }
 }
 
-void nehmeLiveBefehleEntgegen(Mars* mars) {
+static void nehmeLiveBefehleEntgegen(Mars* mars) {
     char command = 'N', tmp = '\n';
     printField(mars);
     printf("Live-Eingabe ausgewählt.\n");
@@ -26,7 +26,7 @@ void nehmeLiveBefehleEntgegen(Mars* mars) {
     printf("Programm wird beendet...\n");
 }
 
-void showHelp() {
+static void showHelp() {
     printf("MARS-ROVER\n\n");
     printf("Optionale Parameter:\n");
     printf("\t-b\tEine Zeichenkette von Befehlen, bestehend aus den Zeichen L (nach links\n");
@@ -35,6 +35,8 @@ void showHelp() {
     printf("\t-h\tEine positive Zahl, die die Höhe des Feldes angibt\n");
     printf("\t-l\tLive-Eingabe aktivieren: Wird dieser Parameter gesetzt, kann der Rover\n");
     printf("\t\tper Live-Eingabe direkt vom Nutzer gesteuert werden.\n");
+    printf("\t-o\tSpeichern der Mars-Karte in der angegebenen Datei\n");
+    printf("\t-f\tLaden einer Mars-Karte aus einer Datei\n");
     printf("\nDie Parameter -l und -b dürfen nicht gemeinsam benutzt werden!\n");
     printf("\nWerden keine Parameter angegeben, startet das Programm standardmäßig mit\n");
     printf("einer Breite von 80 Zeichen, einer Länge von 20 Zeichen und der Befehlsfolge\n");
@@ -79,27 +81,21 @@ int main(int argc, char *const *argv) {
         return 1;
     }
     Mars* mars = initMars(height, width, input);
-    if (mars != NULL) {
-        if (live) {
-            nehmeLiveBefehleEntgegen(mars);
-        } else {
-            fuehreBefehleAus(mars, befehle);
-        }
-        if (output != NULL) {
-            FILE *datei = fopen(output, "wb");
-            if (datei != NULL) {
-                saveMars(datei, mars);
-                fclose(datei);
-            } else {
-                printf("FEHLER: Ausgabedatei konnte nicht geöffnet werden!\n");
-                deleteMars(mars);
-                return 3;
-            }
-        }
-        deleteMars(mars);
-    } else {
+    if (mars == NULL) {
         fprintf(stderr, "FEHLER: Speicherallokation fehlgeschlagen!\n");
         return 2;
     }
+    live ? nehmeLiveBefehleEntgegen(mars) : fuehreBefehleAus(mars, befehle);
+    if (output != NULL) {
+        FILE *datei = fopen(output, "wb");
+        if (datei == NULL) {
+            printf("FEHLER: Ausgabedatei konnte nicht geöffnet werden!\n");
+            deleteMars(mars);
+            return 3;
+        }
+        saveMars(datei, mars);
+        fclose(datei);
+    }
+    deleteMars(mars);
     return 0;
 }

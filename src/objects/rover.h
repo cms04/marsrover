@@ -9,8 +9,8 @@ typedef struct {
     ObstracleList* obstracles;
 } Rover;
 
-Rover* createRover(unsigned short, unsigned short);
+Rover* createRover(unsigned short xpos, unsigned short ypos);
 void deleteRover(Rover*);
-int isRoverPosition(Rover*, unsigned short, unsigned short);
-void doCommand(Rover*, char, unsigned short, unsigned short);
+int isRoverPosition(Rover*, unsigned short xpos, unsigned short ypos);
+void doCommand(Rover*, char command, unsigned short xpos, unsigned short ypos);
 char printRover(Rover*);
