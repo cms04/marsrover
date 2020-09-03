@@ -1,3 +1,6 @@
+#ifndef MARS_H
+#define MARS_H
+
 #include "rover.h"
 
 typedef struct {
@@ -12,3 +15,5 @@ void deleteMars(Mars*);
 void moveRover(Mars*, char command);
 void saveMars(FILE* outputfile, Mars*);
 Mars* initMars(unsigned short height, unsigned short width, char* inputfilename);
+
+#endif
