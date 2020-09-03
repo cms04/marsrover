@@ -4,19 +4,17 @@
 #include "mars.h"
 
 static void printBorders(unsigned short width) {
-    int i;
-    for (i = 0; i < width; i++) {
+    for (int i = 0; i < width; i++) {
         printf("=");
     }
     printf("\n");
 }
 
 void printField(Mars* mars) {
-    unsigned short i, j;
     printf("\n");
     printBorders(*(mars->width));
-    for (i = 0; i < *(mars->height); i++) {
-        for (j = 0; j < *(mars->width); j++) {
+    for (unsigned short i = 0; i < *(mars->height); i++) {
+        for (unsigned short j = 0; j < *(mars->width); j++) {
             isRoverPosition(mars->rover, j, i)
                 ? printf("%c", printRover(mars->rover))
                 : printf("%c", *(*(mars->oberflaeche + i) + j));
@@ -37,11 +35,10 @@ static void putObstracle(ObstracleList* list, unsigned short height, unsigned sh
 
 static void putRandomObstracles(Mars* mars) {
     ObstracleList* obstracles = create();
-    unsigned short i, j;
     time_t t;
     srand((unsigned) time(&t));
-    for (i = 0; i < *(mars->height); i++) {
-        for (j = 0; j < *(mars->width); j++) {
+    for (unsigned short i = 0; i < *(mars->height); i++) {
+        for (unsigned short j = 0; j < *(mars->width); j++) {
             if (rand() % 5 == 0 && (j != *(mars->width) / 2 || i != *(mars->height) / 2)) {
                 *(*(mars->oberflaeche + i) + j) = '#';
                 putObstracle(obstracles, j, i);
@@ -68,10 +65,9 @@ static void saveBasicSettings(Mars* mars, unsigned short height, unsigned short 
 static Mars* initalizeMars(unsigned short height, unsigned short width) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
     saveBasicSettings(mars, height, width);
-    unsigned short i, j;
-    for (i = 0; i < height; i++) {
+    for (unsigned short i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
-        for (j = 0; j < width; j++) {
+        for (unsigned short j = 0; j < width; j++) {
             *(*(mars->oberflaeche + i) + j) = ' ';
         }
     }
@@ -81,15 +77,14 @@ static Mars* initalizeMars(unsigned short height, unsigned short width) {
 
 static Mars* initializeWithFile(FILE *input) {
     Mars* mars = (Mars *) malloc(sizeof(Mars));
-    unsigned short i, j;
     unsigned short height = 0, width = 0;
     fread(&height, sizeof(unsigned short), 1, input);
     fread(&width, sizeof(unsigned short), 1, input);
     saveBasicSettings(mars, height, width);
     ObstracleList* obstracles = create();
-    for (i = 0; i < height; i++) {
+    for (unsigned short i = 0; i < height; i++) {
         *(mars->oberflaeche + i) = (char*) malloc(width * sizeof(char));
-        for (j = 0; j < width; j++) {
+        for (unsigned short j = 0; j < width; j++) {
             char tmp;
             fread(&tmp, sizeof(unsigned char), 1, input);
             tmp += 10;
@@ -120,8 +115,7 @@ Mars* initMars(unsigned short height, unsigned short width, char *input) {
 }
 
 void deleteMars(Mars* mars) {
-    unsigned short i;
-    for (i = 0; i < *(mars->height); i++) {
+    for (unsigned short i = 0; i < *(mars->height); i++) {
         free(*(mars->oberflaeche + i));
     }
     free(mars->oberflaeche);

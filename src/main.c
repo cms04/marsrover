@@ -5,9 +5,8 @@
 #include "objects/mars.h"
 
 static void fuehreBefehleAus(Mars* mars, char* befehle) {
-    int i;
     printField(mars);
-    for (i = 0; i < strlen(befehle); i++) {
+    for (int i = 0; i < strlen(befehle); i++) {
         moveRover(mars, *(befehle + i));
         printField(mars);
     }
