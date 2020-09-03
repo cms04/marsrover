@@ -6,7 +6,7 @@ Rover* createRover(unsigned short xpos, unsigned short ypos) {
     Rover* rover = (Rover *) malloc(sizeof(Rover));
     rover->xpos = (unsigned short *) malloc(sizeof(unsigned int));
     rover->ypos = (unsigned short *) malloc(sizeof(unsigned int));
-    rover->direction = (enum Richtung *) malloc(sizeof(enum Richtung));
+    rover->direction = (Richtung *) malloc(sizeof(Richtung));
     *(rover->xpos) = xpos;
     *(rover->ypos) = ypos;
     *(rover->direction) = NORD;

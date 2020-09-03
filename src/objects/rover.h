@@ -3,12 +3,12 @@
 
 #include "obstraclelist.h"
 
-enum Richtung { NORD, OST, SUED, WEST };
+typedef enum { NORD, OST, SUED, WEST } Richtung;
 
 typedef struct {
     unsigned short* xpos;
     unsigned short* ypos;
-    enum Richtung* direction;
+    Richtung* direction;
     ObstracleList* obstracles;
 } Rover;
 
