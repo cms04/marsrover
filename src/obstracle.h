@@ -7,4 +7,8 @@ typedef struct Obstracle {
     struct Obstracle *next;
 } Obstracle;
 
+Obstracle *createRandomObstracles(unsigned short maxwidth, unsigned short maxheight);
+void deleteObstracles(Obstracle *list);
+int contains(Obstracle *list, unsigned short xposition, unsigned short yposition);
+
 #endif
