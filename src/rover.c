@@ -34,3 +34,37 @@ void printRover(Rover *rover) {
 int isRoverPosition(Rover *rover, unsigned short xposition, unsigned short yposition) {
     return rover->xposition == xposition && rover->yposition == yposition;
 }
+
+void dreheNachLinks(Rover *rover) {
+    switch (rover->richtung) {
+        case UP:
+            rover->richtung = LEFT;
+            break;
+        case LEFT:
+            rover->richtung = DOWN;
+            break;
+        case DOWN:
+            rover->richtung = RIGHT;
+            break;
+        case RIGHT:
+            rover->richtung = UP;
+            break;
+    }
+}
+
+void dreheNachRechts(Rover *rover) {
+    switch (rover->richtung) {
+        case UP:
+            rover->richtung = RIGHT;
+            break;
+        case LEFT:
+            rover->richtung = UP;
+            break;
+        case DOWN:
+            rover->richtung = LEFT;
+            break;
+        case RIGHT:
+            rover->richtung = DOWN;
+            break;
+    }
+}

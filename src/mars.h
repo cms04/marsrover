@@ -14,5 +14,6 @@ typedef struct {
 Mars *createRandom(unsigned short xpos, unsigned short ypos);
 void deleteMars(Mars *mars);
 void print(Mars *mars);
+void fuehreBefehlAus(Mars *mars, char befehl);
 
 #endif

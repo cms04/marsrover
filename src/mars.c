@@ -2,6 +2,23 @@
 #include <stdio.h>
 #include "mars.h"
 
+void fuehreBefehlAus(Mars *mars, char befehl) {
+    switch (befehl) {
+        case 'M':
+            //bewegeRoverNachVorne(mars);
+            break;
+        case 'B':
+            //bewegeRoverZurueck(mars);
+            break;
+        case 'L':
+            dreheNachLinks(mars->rover);
+            break;
+        case 'R':
+            dreheNachRechts(mars->rover);
+            break;
+    }
+}
+
 Mars *createRandom(unsigned short width, unsigned short height) {
     Mars *mars = (Mars *) malloc(sizeof(Mars));
     mars->width = width;
@@ -18,6 +35,10 @@ void deleteMars(Mars *mars) {
 }
 
 void print(Mars *mars) {
+    for (unsigned short i = 0; i < mars->width; i++) {
+        printf("=");
+    }
+    printf("\n");
     for (unsigned short i = 0; i < mars->height; i++) {
         for (unsigned short j = 0; j < mars->width; j++) {
             if (isRoverPosition(mars->rover, j, i)) {
@@ -30,4 +51,8 @@ void print(Mars *mars) {
         }
         printf("\n");
     }
+    for (unsigned short i = 0; i < mars->width; i++) {
+        printf("=");
+    }
+    printf("\n");
 }

@@ -18,5 +18,7 @@ Rover *createRover(unsigned short xposition, unsigned short yposition);
 void deleteRover(Rover *rover);
 int isRoverPosition(Rover *rover, unsigned short xposition, unsigned short yposition);
 void printRover(Rover *rover);
+void dreheNachLinks(Rover *rover);
+void dreheNachRechts(Rover *rover);
 
 #endif
