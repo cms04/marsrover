@@ -100,3 +100,20 @@ void bewegeRoverZurueck(Mars *mars) {
         mars->rover->yposition = newy;
     }
 }
+
+void saveToFile(Mars *mars, char *filename) {
+    FILE *out = fopen(filename, "wb");
+    if (out == NULL) {
+        fprintf(stderr, "ERROR: Could not write to file %s\n", filename);
+        return;
+    }
+    fwrite(&(mars->height), sizeof(unsigned short), 1, out);
+    fwrite(&(mars->width), sizeof(unsigned short), 1, out);
+    Obstracle *current = mars->obstracles;
+    while (current != NULL) {
+        fwrite(&(current->xposition), sizeof(unsigned short), 1, out);
+        fwrite(&(current->yposition), sizeof(unsigned short), 1, out);
+        current = current->next;
+    }
+    fclose(out);
+}

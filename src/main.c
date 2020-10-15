@@ -13,10 +13,10 @@ void arbeiteBefehleAb(Mars *mars, char *befehle) {
 
 int main(int argc, char *const *argv) {
     unsigned short width = 80, height = 20;
-    char *befehle = "MMLBBBBRMM";
+    char *befehle = "MMLBBBBRMM", *outputfilename = NULL;
     extern char *optarg;
     char param = -1;
-    while ((param = getopt(argc, argv, "h:w:")) != EOF) {
+    while ((param = getopt(argc, argv, "h:w:b:o:")) != EOF) {
         switch (param) {
             case 'h':
                 height = atoi(optarg);
@@ -24,11 +24,20 @@ int main(int argc, char *const *argv) {
             case 'w':
                 width = atoi(optarg);
                 break;
+            case 'b':
+                befehle = optarg;
+                break;
+            case 'o':
+                outputfilename = optarg;
+                break;
         }
     }
     Mars *mars = createRandom(width, height);
     print(mars);
     arbeiteBefehleAb(mars, befehle);
+    if (outputfilename != NULL) {
+        saveToFile(mars, outputfilename);
+    }
     deleteMars(mars);
     return 0;
 }

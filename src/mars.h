@@ -17,5 +17,6 @@ void print(Mars *mars);
 void fuehreBefehlAus(Mars *mars, char befehl);
 void bewegeRoverNachVorne(Mars *mars);
 void bewegeRoverZurueck(Mars *mars);
+void saveToFile(Mars *mars, char *filename);
 
 #endif
