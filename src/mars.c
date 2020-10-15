@@ -5,10 +5,10 @@
 void fuehreBefehlAus(Mars *mars, char befehl) {
     switch (befehl) {
         case 'M':
-            //bewegeRoverNachVorne(mars);
+            bewegeRoverNachVorne(mars);
             break;
         case 'B':
-            //bewegeRoverZurueck(mars);
+            bewegeRoverZurueck(mars);
             break;
         case 'L':
             dreheNachLinks(mars->rover);
@@ -55,4 +55,48 @@ void print(Mars *mars) {
         printf("=");
     }
     printf("\n");
+}
+
+void bewegeRoverNachVorne(Mars *mars) {
+    unsigned short newx = mars->rover->xposition, newy = mars->rover->yposition;
+    switch (mars->rover->richtung) {
+        case UP:
+            newy = (newy == 0) ? mars->height - 1 : newy - 1;
+            break;
+        case DOWN:
+            newy = (newy == mars->height - 1) ? 0 : newy + 1;
+            break;
+        case RIGHT:
+            newx = (newx == mars->width - 1) ? 0 : newx + 1;
+            break;
+        case LEFT:
+            newx = (newx == 0) ? mars->width - 1 : newx - 1;
+            break;
+    }
+    if (!contains(mars->obstracles, newx, newy)) {
+        mars->rover->xposition = newx;
+        mars->rover->yposition = newy;
+    }
+}
+
+void bewegeRoverZurueck(Mars *mars) {
+    unsigned short newx = mars->rover->xposition, newy = mars->rover->yposition;
+    switch (mars->rover->richtung) {
+        case UP:
+            newy = (newy == mars->height - 1) ? 0 : newy + 1;
+            break;
+        case DOWN:
+            newy = (newy == 0) ? mars->height - 1 : newy - 1;
+            break;
+        case RIGHT:
+            newx = (newx == 0) ? mars->width - 1 : newx - 1;
+            break;
+        case LEFT:
+            newx = (newx == mars->width - 1) ? 0 : newx + 1;
+            break;
+    }
+    if (!contains(mars->obstracles, newx, newy)) {
+        mars->rover->xposition = newx;
+        mars->rover->yposition = newy;
+    }
 }
