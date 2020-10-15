@@ -12,6 +12,7 @@ typedef struct {
 } Mars;
 
 Mars *createRandom(unsigned short xpos, unsigned short ypos);
+Mars *createFromFile(char *filename);
 void deleteMars(Mars *mars);
 void print(Mars *mars);
 void fuehreBefehlAus(Mars *mars, char befehl);

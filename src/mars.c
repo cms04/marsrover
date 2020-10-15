@@ -117,3 +117,21 @@ void saveToFile(Mars *mars, char *filename) {
     }
     fclose(out);
 }
+
+Mars *createFromFile(char *filename) {
+    FILE *in = fopen(filename, "rb");
+    if (in == NULL) {
+        fprintf(stderr, "ERROR: Could not open file %s\n", filename);
+        exit(1);
+    }
+    unsigned short height = 0, width = 0;
+    fread(&height, sizeof(unsigned short), 1, in);
+    fread(&width, sizeof(unsigned short), 1, in);
+    Mars *mars = (Mars *) malloc(sizeof(Mars));
+    mars->width = width;
+    mars->height = height;
+    mars->rover = createRover(width / 2, height / 2);
+    mars->obstracles = readObstraclesFromFile(in);
+    fclose(in);
+    return mars;
+}

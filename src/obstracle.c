@@ -20,6 +20,16 @@ Obstracle *createRandomObstracles(unsigned short maxwidth, unsigned short maxhei
     return head;
 }
 
+Obstracle *readObstraclesFromFile(FILE *in) {
+    Obstracle *head = NULL, *new = NULL;
+    unsigned short coordinates[2] = {0, 0};
+    while (fread(&coordinates, sizeof(unsigned short), 2, in) == 2) {
+        new = createNewObstracle(coordinates[0], coordinates[1]);
+        head = addHindernisToList(head, new);
+    }
+    return head;
+}
+
 void deleteObstracles(Obstracle *list) {
     Obstracle *tmp;
     while (list != NULL) {
