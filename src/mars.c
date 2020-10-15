@@ -19,6 +19,17 @@ void fuehreBefehlAus(Mars *mars, char befehl) {
     }
 }
 
+void fuehreLiveBefehleAus(Mars *mars) {
+    char befehl = 'x';
+    do {
+        printf("\nBefehl eingeben [LRMBx]: ");
+        befehl = fgetc(stdin);
+        printf("\n");
+        fuehreBefehlAus(mars, befehl);
+        print(mars);
+    } while(befehl != 'x');
+}
+
 Mars *createRandom(unsigned short width, unsigned short height) {
     Mars *mars = (Mars *) malloc(sizeof(Mars));
     mars->width = width;
