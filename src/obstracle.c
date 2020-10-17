@@ -5,38 +5,49 @@
 static Obstracle *createNewObstracle(unsigned short xposition, unsigned short yposition);
 static Obstracle *addHindernisToList(Obstracle *list, Obstracle *new);
 
-Obstracle *createRandomObstracles(unsigned short maxwidth, unsigned short maxheight) {
-    Obstracle *head = NULL, *new = NULL;
+Obstracle **createRandomObstracles(unsigned short maxwidth, unsigned short maxheight) {
+    Obstracle **list = (Obstracle **) malloc(maxheight * sizeof(Obstracle *));
+    for (unsigned short i = 0; i < maxheight; i++) {
+        *(list + i) = NULL;
+    }
+    Obstracle *new = NULL;
     time_t t;
     srand((unsigned) time(&t));
     for (unsigned short i = 0; i < maxheight; i++) {
         for (unsigned short j = 0; j < maxwidth; j++) {
             if (rand() % 5 == 0 && (j != maxwidth / 2 || i != maxheight / 2)) {
                 new = createNewObstracle(j, i);
-                head = addHindernisToList(head, new);
+                *(list + i) = addHindernisToList(*(list + i), new);
             }
         }
     }
-    return head;
+    return list;
 }
 
-Obstracle *readObstraclesFromFile(FILE *in) {
-    Obstracle *head = NULL, *new = NULL;
+Obstracle **readObstraclesFromFile(FILE *in, unsigned short maxheight) {
+    Obstracle **list = (Obstracle **) malloc(maxheight * sizeof(Obstracle *));
+    for (unsigned short i = 0; i < maxheight; i++) {
+        *(list + i) = NULL;
+    }
+    Obstracle *new = NULL;
     unsigned short coordinates[2] = {0, 0};
     while (fread(&coordinates, sizeof(unsigned short), 2, in) == 2) {
         new = createNewObstracle(coordinates[0], coordinates[1]);
-        head = addHindernisToList(head, new);
+        *(list + coordinates[1]) = addHindernisToList(*(list + coordinates[1]), new);
     }
-    return head;
+    return list;
 }
 
-void deleteObstracles(Obstracle *list) {
-    Obstracle *tmp;
-    while (list != NULL) {
-        tmp = list;
-        list = list->next;
-        free(tmp);
+void deleteObstracles(Obstracle **lists, unsigned short maxheight) {
+    for (unsigned short i = 0; i < maxheight; i++) {
+        Obstracle *tmp, *list = *(lists + i);
+        while (list != NULL) {
+            tmp = list;
+            list = list->next;
+            free(tmp);
+        }
     }
+    free(lists);
 }
 
 static Obstracle *createNewObstracle(unsigned short xposition, unsigned short yposition) {
