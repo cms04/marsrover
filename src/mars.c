@@ -22,7 +22,7 @@ void fuehreBefehlAus(Mars *mars, char befehl) {
 void fuehreLiveBefehleAus(Mars *mars) {
     char befehl = 'x';
     do {
-        printf("\nBefehl eingeben [LRMBx]: ");
+        printf("\nEnter command [LRMBx]: ");
         befehl = fgetc(stdin);
         printf("\n");
         fuehreBefehlAus(mars, befehl);
