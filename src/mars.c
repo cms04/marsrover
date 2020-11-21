@@ -41,7 +41,7 @@ Mars *createRandom(unsigned short width, unsigned short height) {
 
 void deleteMars(Mars *mars) {
     deleteRover(mars->rover);
-    deleteObstracles(mars->obstracles);
+    deleteObstracles(mars->obstracles, mars->height);
     free(mars);
 }
 
@@ -54,7 +54,7 @@ void print(Mars *mars) {
         for (unsigned short j = 0; j < mars->width; j++) {
             if (isRoverPosition(mars->rover, j, i)) {
                 printRover(mars->rover);
-            } else if (contains(mars->obstracles, j, i)) {
+            } else if (contains(mars->obstracles[i], j, i)) {
                 printf("#");
             } else {
                 printf(" ");
@@ -84,7 +84,7 @@ void bewegeRoverNachVorne(Mars *mars) {
             newx = (newx == 0) ? mars->width - 1 : newx - 1;
             break;
     }
-    if (!contains(mars->obstracles, newx, newy)) {
+    if (!contains(mars->obstracles[newy], newx, newy)) {
         mars->rover->xposition = newx;
         mars->rover->yposition = newy;
     }
@@ -106,7 +106,7 @@ void bewegeRoverZurueck(Mars *mars) {
             newx = (newx == mars->width - 1) ? 0 : newx + 1;
             break;
     }
-    if (!contains(mars->obstracles, newx, newy)) {
+    if (!contains(mars->obstracles[newy], newx, newy)) {
         mars->rover->xposition = newx;
         mars->rover->yposition = newy;
     }
@@ -120,11 +120,13 @@ void saveToFile(Mars *mars, char *filename) {
     }
     fwrite(&(mars->height), sizeof(unsigned short), 1, out);
     fwrite(&(mars->width), sizeof(unsigned short), 1, out);
-    Obstracle *current = mars->obstracles;
-    while (current != NULL) {
-        fwrite(&(current->xposition), sizeof(unsigned short), 1, out);
-        fwrite(&(current->yposition), sizeof(unsigned short), 1, out);
-        current = current->next;
+    for (unsigned short i = 0; i < mars->height; i++) {
+        Obstracle *current = mars->obstracles[i];
+        while (current != NULL) {
+            fwrite(&(current->xposition), sizeof(unsigned short), 1, out);
+            fwrite(&(current->yposition), sizeof(unsigned short), 1, out);
+            current = current->next;
+        }
     }
     fclose(out);
 }
@@ -142,7 +144,7 @@ Mars *createFromFile(char *filename) {
     mars->width = width;
     mars->height = height;
     mars->rover = createRover(width / 2, height / 2);
-    mars->obstracles = readObstraclesFromFile(in);
+    mars->obstracles = readObstraclesFromFile(in, mars->height);
     fclose(in);
     return mars;
 }

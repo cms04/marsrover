@@ -9,9 +9,9 @@ typedef struct Obstracle {
     struct Obstracle *next;
 } Obstracle;
 
-Obstracle *createRandomObstracles(unsigned short maxwidth, unsigned short maxheight);
-Obstracle *readObstraclesFromFile(FILE *in);
-void deleteObstracles(Obstracle *list);
+Obstracle **createRandomObstracles(unsigned short maxwidth, unsigned short maxheight);
+Obstracle **readObstraclesFromFile(FILE *in, unsigned short maxheight);
+void deleteObstracles(Obstracle **list, unsigned short maxheight);
 int contains(Obstracle *list, unsigned short xposition, unsigned short yposition);
 
 #endif
