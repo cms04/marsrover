@@ -20,5 +20,6 @@ void bewegeRoverNachVorne(Mars *mars);
 void bewegeRoverZurueck(Mars *mars);
 void saveToFile(Mars *mars, char *filename);
 void fuehreLiveBefehleAus(Mars *mars);
+void arbeiteBefehleAb(Mars *mars, char *befehle);
 
 #endif

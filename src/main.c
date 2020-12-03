@@ -2,14 +2,6 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-
-void arbeiteBefehleAb(Mars *mars, char *befehle) {
-    for (size_t i = 0; i < strlen(befehle); i++) {
-        fuehreBefehlAus(mars, *(befehle + i));
-        print(mars);
-    }
-}
 
 int main(int argc, char *const *argv) {
     unsigned short width = 80, height = 20, live = 0;

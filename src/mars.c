@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "mars.h"
 
 void fuehreBefehlAus(Mars *mars, char befehl) {
@@ -28,6 +29,13 @@ void fuehreLiveBefehleAus(Mars *mars) {
         fuehreBefehlAus(mars, befehl);
         print(mars);
     } while(befehl != 'x');
+}
+
+void arbeiteBefehleAb(Mars *mars, char *befehle) {
+    for (size_t i = 0; i < strlen(befehle); i++) {
+        fuehreBefehlAus(mars, *(befehle + i));
+        print(mars);
+    }
 }
 
 Mars *createRandom(unsigned short width, unsigned short height) {
