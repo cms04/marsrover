@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -std=c99 -g
+CFLAGS = -Wall -std=c99 -g -lpthread
 OUTPUT = marsrover
 VALGRINDOPTIONS = --leak-check=full --track-origins=yes -s
 

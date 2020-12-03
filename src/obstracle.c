@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
+#include <pthread.h>
 #include "obstracle.h"
 
 static Obstracle *createNewObstracle(unsigned short xposition, unsigned short yposition);
@@ -10,19 +11,36 @@ Obstracle **createRandomObstracles(unsigned short maxwidth, unsigned short maxhe
     for (unsigned short i = 0; i < maxheight; i++) {
         *(list + i) = NULL;
     }
-    Obstracle *new = NULL;
-    time_t t;
-    srand((unsigned) time(&t));
+    srand(time(NULL));
+    pthread_t *threads = (pthread_t *) malloc(maxheight * sizeof(pthread_t));
+    Parameter *parameters = (Parameter *) malloc(maxheight * sizeof(Parameter));
     for (unsigned short i = 0; i < maxheight; i++) {
-        for (unsigned short j = 0; j < maxwidth; j++) {
-            if (rand() % 5 == 0 && (j != maxwidth / 2 || i != maxheight / 2)) {
-                new = createNewObstracle(j, i);
-                *(list + i) = addHindernisToList(*(list + i), new);
-            }
-        }
+        (parameters + i)->list = list + i;
+        (parameters + i)->maxheight = maxheight;
+        (parameters + i)->maxwidth = maxwidth;
+        (parameters + i)->index = i;
+        pthread_create(threads + i, NULL, &createObstracleList, parameters + i);
     }
+    for (unsigned short i = 0; i < maxheight; i++) {
+        pthread_join(threads[i], (void *) *(list + i));
+    }
+    free(threads);
+    free(parameters);
     return list;
 }
+
+void *createObstracleList(void *parameter) {
+    Parameter *p = (Parameter *) parameter;
+    Obstracle *new = NULL;
+    for (unsigned short j = 0; j < p->maxwidth; j++) {
+        if (rand() % 5 == 0 && (j != p->maxwidth / 2 || p->index != p->maxheight / 2)) {
+            new = createNewObstracle(j, p->index);
+            *(p->list) = addHindernisToList(*(p->list), new);
+        }
+    }
+    pthread_exit((void *) p->list);
+}
+
 
 Obstracle **readObstraclesFromFile(FILE *in, unsigned short maxheight) {
     Obstracle **list = (Obstracle **) malloc(maxheight * sizeof(Obstracle *));
