@@ -10,7 +10,6 @@ typedef struct obstracle_s {
 } obstracle_t;
 
 typedef struct {
-    obstracle_t **list;
     unsigned short maxheight;
     unsigned short maxwidth;
     unsigned short index;

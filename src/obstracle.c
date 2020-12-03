@@ -24,14 +24,13 @@ obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short m
         return NULL;
     }
     for (unsigned short i = 0; i < maxheight; i++) {
-        (parameters + i)->list = list + i;
         (parameters + i)->maxheight = maxheight;
         (parameters + i)->maxwidth = maxwidth;
         (parameters + i)->index = i;
         pthread_create(threads + i, NULL, &create_obstracle_list, parameters + i);
     }
     for (unsigned short i = 0; i < maxheight; i++) {
-        pthread_join(threads[i], (void *) *(list + i));
+        pthread_join(threads[i], (void *) (list + i));
     }
     free(threads);
     free(parameters);
@@ -40,14 +39,15 @@ obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short m
 
 void *create_obstracle_list(void *parameter) {
     parameter_t *p = (parameter_t *) parameter;
+    obstracle_t *list = NULL;
     obstracle_t *new = NULL;
     for (unsigned short j = 0; j < p->maxwidth; j++) {
         if (rand() % 5 == 0 && (j != p->maxwidth / 2 || p->index != p->maxheight / 2)) {
             new = create_new_obstracle(j, p->index);
-            *(p->list) = add_obstracle_to_list(*(p->list), new);
+            list = add_obstracle_to_list(list, new);
         }
     }
-    pthread_exit((void *) p->list);
+    pthread_exit((void *) list);
 }
 
 
