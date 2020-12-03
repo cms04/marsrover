@@ -50,7 +50,6 @@ int main(int argc, char *const *argv) {
         if (outputfilename != NULL) {
             save_to_file(mars, outputfilename);
         }
-        return 0;
     } else {
         print_mars(mars);
         if (live) {
