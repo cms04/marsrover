@@ -157,7 +157,7 @@ mars_t *create_from_file(char *filename) {
     FILE *in = fopen(filename, "rb");
     if (in == NULL) {
         fprintf(stderr, "ERROR: Could not open file %s\n", filename);
-        return NULL;
+        exit(3);
     }
     unsigned short height = 0, width = 0;
     fread(&height, sizeof(unsigned short), 1, in);
