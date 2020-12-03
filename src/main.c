@@ -41,23 +41,16 @@ int main(int argc, char *const *argv) {
         fprintf(stderr, "ERROR: Not enough space available.\n");
         return 1;
     }
-    if (outputfilename != NULL) {
-        pid_t pid = fork();
-        if (pid == (pid_t) -1) {
-            fprintf(stderr, "ERROR: fork() failed.\n");
-            return 3;
-        } else if (pid == (pid_t) 0) {
+    pid_t pid = fork();
+    if (pid == (pid_t) -1) {
+        fprintf(stderr, "ERROR: fork() failed.\n");
+        delete_mars(mars);
+        return 3;
+    } else if (pid == (pid_t) 0) {
+        if (outputfilename != NULL) {
             save_to_file(mars, outputfilename);
-            return 0;
-        } else {
-            print_mars(mars);
-            if (live) {
-                execute_live_commands(mars);
-            } else {
-                execute_command_string(mars, befehle);
-            }
-            waitpid(pid, NULL, 0);
         }
+        return 0;
     } else {
         print_mars(mars);
         if (live) {
@@ -65,6 +58,7 @@ int main(int argc, char *const *argv) {
         } else {
             execute_command_string(mars, befehle);
         }
+        waitpid(pid, NULL, 0);
     }
     delete_mars(mars);
     return 0;
