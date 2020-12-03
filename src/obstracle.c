@@ -94,26 +94,19 @@ obstracle_t *create_new_obstracle(unsigned short xposition, unsigned short yposi
 }
 
 obstracle_t *add_obstracle_to_list(obstracle_t *list, obstracle_t *new) {
-    if (new != NULL) {
-        if (list == NULL) {
-            return new;
-        }
-        obstracle_t *current = list;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = new;
+    if (list == NULL) {
+        return new;
     }
+    list->next = add_obstracle_to_list(list->next, new);
     return list;
 }
 
 int list_contains(obstracle_t *list, unsigned short xposition, unsigned short yposition) {
-    obstracle_t *current = list;
-    while (current != NULL) {
-        if (current->xposition == xposition && current->yposition == yposition) {
-            return 1;
-        }
-        current = current->next;
+    if (list == NULL) {
+        return 0;
     }
-    return 0;
+    if (list->xposition == xposition && list->yposition == yposition) {
+        return 1;
+    }
+    return list_contains(list->next, xposition, yposition);
 }
