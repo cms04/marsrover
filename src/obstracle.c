@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <pthread.h>
+#include <sys/sysinfo.h>
 #include "obstracle.h"
 
 obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short maxheight) {
@@ -12,25 +13,28 @@ obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short m
         *(list + i) = NULL;
     }
     srand(time(NULL));
-    pthread_t *threads = (pthread_t *) malloc(maxheight * sizeof(pthread_t));
+    int thread_number = get_nprocs_conf();
+    pthread_t *threads = (pthread_t *) malloc(thread_number * sizeof(pthread_t));
     if (threads == NULL) {
         free(list);
         return NULL;
     }
-    parameter_t *parameters = (parameter_t *) malloc(maxheight * sizeof(parameter_t));
+    parameter_t *parameters = (parameter_t *) malloc(thread_number * sizeof(parameter_t));
     if (parameters == NULL) {
         free(list);
         free(threads);
         return NULL;
     }
-    for (unsigned short i = 0; i < maxheight; i++) {
+    for (unsigned short i = 0; i < thread_number; i++) {
+        (parameters + i)->lists = list;
         (parameters + i)->maxheight = maxheight;
         (parameters + i)->maxwidth = maxwidth;
         (parameters + i)->index = i;
+        (parameters + i)->steps = thread_number;
         pthread_create(threads + i, NULL, &create_obstracle_list, parameters + i);
     }
-    for (unsigned short i = 0; i < maxheight; i++) {
-        pthread_join(threads[i], (void *) (list + i));
+    for (unsigned short i = 0; i < thread_number; i++) {
+        pthread_join(threads[i], NULL);
     }
     free(threads);
     free(parameters);
@@ -39,15 +43,17 @@ obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short m
 
 void *create_obstracle_list(void *parameter) {
     parameter_t *p = (parameter_t *) parameter;
-    obstracle_t *list = NULL;
+    obstracle_t **lists = p->lists;
     obstracle_t *new = NULL;
-    for (unsigned short j = 0; j < p->maxwidth; j++) {
-        if (rand() % 5 == 0 && (j != p->maxwidth / 2 || p->index != p->maxheight / 2)) {
-            new = create_new_obstracle(j, p->index);
-            list = add_obstracle_to_list(list, new);
+    for (unsigned short i = p->index; i < p->maxheight; i += p->steps) {
+        for (unsigned short j = 0; j < p->maxwidth; j++) {
+            if (rand() % 5 == 0 && (j != p->maxwidth / 2 || i != p->maxheight / 2)) {
+                new = create_new_obstracle(j, i);
+                *(lists + i) = add_obstracle_to_list(*(lists + i), new);
+            }
         }
     }
-    pthread_exit((void *) list);
+    return NULL;
 }
 
 

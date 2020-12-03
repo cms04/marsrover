@@ -10,9 +10,11 @@ typedef struct obstracle_s {
 } obstracle_t;
 
 typedef struct {
+    obstracle_t **lists;
     unsigned short maxheight;
     unsigned short maxwidth;
     unsigned short index;
+    int steps;
 } parameter_t;
 
 obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short maxheight);
