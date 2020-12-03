@@ -6,19 +6,19 @@ typedef enum {
     LEFT,
     RIGHT,
     DOWN
-} Richtung;
+} richtung_t;
 
 typedef struct {
     unsigned short xposition;
     unsigned short yposition;
-    Richtung richtung;
-} Rover;
+    richtung_t richtung;
+} rover_t;
 
-Rover *createRover(unsigned short xposition, unsigned short yposition);
-void deleteRover(Rover *rover);
-int isRoverPosition(Rover *rover, unsigned short xposition, unsigned short yposition);
-void printRover(Rover *rover);
-void dreheNachLinks(Rover *rover);
-void dreheNachRechts(Rover *rover);
+rover_t *create_rover(unsigned short xposition, unsigned short yposition);
+void delete_rover(rover_t *rover);
+int is_rover_position(rover_t *rover, unsigned short xposition, unsigned short yposition);
+void print_rover(rover_t *rover);
+void turn_rover_left(rover_t *rover);
+void turn_rover_right(rover_t *rover);
 
 #endif

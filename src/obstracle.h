@@ -3,23 +3,25 @@
 
 #include <stdio.h>
 
-typedef struct Obstracle {
+typedef struct obstracle_s {
     unsigned short xposition;
     unsigned short yposition;
-    struct Obstracle *next;
-} Obstracle;
+    struct obstracle_s *next;
+} obstracle_t;
 
 typedef struct {
-    Obstracle **list;
+    obstracle_t **list;
     unsigned short maxheight;
     unsigned short maxwidth;
     unsigned short index;
-} Parameter;
+} parameter_t;
 
-Obstracle **createRandomObstracles(unsigned short maxwidth, unsigned short maxheight);
-Obstracle **readObstraclesFromFile(FILE *in, unsigned short maxheight);
-void deleteObstracles(Obstracle **list, unsigned short maxheight);
-int contains(Obstracle *list, unsigned short xposition, unsigned short yposition);
-void *createObstracleList(void *parameter);
+obstracle_t **create_obstracles_random(unsigned short maxwidth, unsigned short maxheight);
+obstracle_t **create_obstracles_from_file(FILE *in, unsigned short maxheight);
+void delete_obstracles(obstracle_t **list, unsigned short maxheight);
+int list_contains(obstracle_t *list, unsigned short xposition, unsigned short yposition);
+void *create_obstracle_list(void *parameter);
+obstracle_t *create_new_obstracle(unsigned short xposition, unsigned short yposition);
+obstracle_t *add_obstracle_to_list(obstracle_t *list, obstracle_t *new);
 
 #endif

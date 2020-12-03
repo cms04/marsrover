@@ -3,80 +3,80 @@
 #include <string.h>
 #include "mars.h"
 
-void fuehreBefehlAus(Mars *mars, char befehl) {
+void execute_command(mars_t *mars, char befehl) {
     switch (befehl) {
         case 'M':
-            bewegeRoverNachVorne(mars);
+            move_rover_forward(mars);
             break;
         case 'B':
-            bewegeRoverZurueck(mars);
+            move_rover_back(mars);
             break;
         case 'L':
-            dreheNachLinks(mars->rover);
+            turn_rover_left(mars->rover);
             break;
         case 'R':
-            dreheNachRechts(mars->rover);
+            turn_rover_right(mars->rover);
             break;
     }
 }
 
-void fuehreLiveBefehleAus(Mars *mars) {
+void execute_live_commands(mars_t *mars) {
     char befehl = 'x';
     do {
         printf("\nEnter command [LRMBx]: ");
         befehl = fgetc(stdin);
         printf("\n");
-        fuehreBefehlAus(mars, befehl);
-        print(mars);
+        execute_command(mars, befehl);
+        print_mars(mars);
     } while(befehl != 'x');
 }
 
-void arbeiteBefehleAb(Mars *mars, char *befehle) {
+void execute_command_string(mars_t *mars, char *befehle) {
     for (size_t i = 0; i < strlen(befehle); i++) {
-        fuehreBefehlAus(mars, *(befehle + i));
-        print(mars);
+        execute_command(mars, *(befehle + i));
+        print_mars(mars);
     }
 }
 
-Mars *createRandom(unsigned short width, unsigned short height) {
-    Mars *mars = (Mars *) malloc(sizeof(Mars));
+mars_t *create_random(unsigned short width, unsigned short height) {
+    mars_t *mars = (mars_t *) malloc(sizeof(mars_t));
     if (mars == NULL) {
         return NULL;
     }
     mars->width = width;
     mars->height = height;
-    mars->rover = createRover(width / 2, height / 2);
+    mars->rover = create_rover(width / 2, height / 2);
     if (mars->rover == NULL) {
         free(mars);
         return NULL;
     }
-    mars->obstracles = createRandomObstracles(width, height);
+    mars->obstracles = create_obstracles_random(width, height);
     if (mars->obstracles == NULL) {
-        deleteRover(mars->rover);
+        delete_rover(mars->rover);
         free(mars);
         return NULL;
     }
     return mars;
 }
 
-void deleteMars(Mars *mars) {
+void delete_mars(mars_t *mars) {
     if (mars != NULL) {
-        deleteRover(mars->rover);
-        deleteObstracles(mars->obstracles, mars->height);
+        delete_rover(mars->rover);
+        delete_obstracles(mars->obstracles, mars->height);
         free(mars);
     }
 }
 
-void print(Mars *mars) {
+void print_mars(mars_t *mars) {
     for (unsigned short i = 0; i < mars->width; i++) {
         printf("=");
     }
     printf("\n");
     for (unsigned short i = 0; i < mars->height; i++) {
         for (unsigned short j = 0; j < mars->width; j++) {
-            if (isRoverPosition(mars->rover, j, i)) {
-                printRover(mars->rover);
-            } else if (contains(mars->obstracles[i], j, i)) {
+            if (is_rover_position(mars->rover, j, i)) {
+                print_rover(mars->rover);
+            } else if (list_contains(mars->obstracles[i], j, i)) {
                 printf("#");
             } else {
                 printf(" ");
@@ -90,7 +90,7 @@ void print(Mars *mars) {
     printf("\n");
 }
 
-void bewegeRoverNachVorne(Mars *mars) {
+void move_rover_forward(mars_t *mars) {
     unsigned short newx = mars->rover->xposition, newy = mars->rover->yposition;
     switch (mars->rover->richtung) {
         case UP:
@@ -106,13 +106,13 @@ void bewegeRoverNachVorne(Mars *mars) {
             newx = (newx == 0) ? mars->width - 1 : newx - 1;
             break;
     }
-    if (!contains(mars->obstracles[newy], newx, newy)) {
+    if (!list_contains(mars->obstracles[newy], newx, newy)) {
         mars->rover->xposition = newx;
         mars->rover->yposition = newy;
     }
 }
 
-void bewegeRoverZurueck(Mars *mars) {
+void move_rover_back(mars_t *mars) {
     unsigned short newx = mars->rover->xposition, newy = mars->rover->yposition;
     switch (mars->rover->richtung) {
         case UP:
@@ -128,13 +128,13 @@ void bewegeRoverZurueck(Mars *mars) {
             newx = (newx == mars->width - 1) ? 0 : newx + 1;
             break;
     }
-    if (!contains(mars->obstracles[newy], newx, newy)) {
+    if (!list_contains(mars->obstracles[newy], newx, newy)) {
         mars->rover->xposition = newx;
         mars->rover->yposition = newy;
     }
 }
 
-void saveToFile(Mars *mars, char *filename) {
+void save_to_file(mars_t *mars, char *filename) {
     FILE *out = fopen(filename, "wb");
     if (out == NULL) {
         fprintf(stderr, "ERROR: Could not write to file %s\n", filename);
@@ -143,7 +143,7 @@ void saveToFile(Mars *mars, char *filename) {
     fwrite(&(mars->height), sizeof(unsigned short), 1, out);
     fwrite(&(mars->width), sizeof(unsigned short), 1, out);
     for (unsigned short i = 0; i < mars->height; i++) {
-        Obstracle *current = mars->obstracles[i];
+        obstracle_t *current = mars->obstracles[i];
         while (current != NULL) {
             fwrite(&(current->xposition), sizeof(unsigned short), 1, out);
             fwrite(&(current->yposition), sizeof(unsigned short), 1, out);
@@ -153,7 +153,7 @@ void saveToFile(Mars *mars, char *filename) {
     fclose(out);
 }
 
-Mars *createFromFile(char *filename) {
+mars_t *create_from_file(char *filename) {
     FILE *in = fopen(filename, "rb");
     if (in == NULL) {
         fprintf(stderr, "ERROR: Could not open file %s\n", filename);
@@ -162,22 +162,22 @@ Mars *createFromFile(char *filename) {
     unsigned short height = 0, width = 0;
     fread(&height, sizeof(unsigned short), 1, in);
     fread(&width, sizeof(unsigned short), 1, in);
-    Mars *mars = (Mars *) malloc(sizeof(Mars));
+    mars_t *mars = (mars_t *) malloc(sizeof(mars_t));
     if (mars == NULL) {
         fclose(in);
         return NULL;
     }
     mars->width = width;
     mars->height = height;
-    mars->rover = createRover(width / 2, height / 2);
+    mars->rover = create_rover(width / 2, height / 2);
     if (mars->rover == NULL) {
         free(mars);
         fclose(in);
         return NULL;
     }
-    mars->obstracles = readObstraclesFromFile(in, mars->height);
+    mars->obstracles = create_obstracles_from_file(in, mars->height);
     if (mars->obstracles == NULL) {
-        deleteRover(mars->rover);
+        delete_rover(mars->rover);
         free(mars);
         fclose(in);
         return NULL;

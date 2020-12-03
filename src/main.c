@@ -30,20 +30,20 @@ int main(int argc, char *const *argv) {
                 break;
         }
     }
-    Mars *mars = (inputfilename == NULL) ? createRandom(width, height) : createFromFile(inputfilename);
+    mars_t *mars = (inputfilename == NULL) ? create_random(width, height) : create_from_file(inputfilename);
     if (mars == NULL) {
         fprintf(stderr, "ERROR: Not enough space available.\n");
         return 1;
     }
-    print(mars);
+    print_mars(mars);
     if (live) {
-        fuehreLiveBefehleAus(mars);
+        execute_live_commands(mars);
     } else {
-        arbeiteBefehleAb(mars, befehle);
+        execute_command_string(mars, befehle);
     }
     if (outputfilename != NULL) {
-        saveToFile(mars, outputfilename);
+        save_to_file(mars, outputfilename);
     }
-    deleteMars(mars);
+    delete_mars(mars);
     return 0;
 }
