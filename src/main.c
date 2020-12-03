@@ -2,6 +2,8 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 int main(int argc, char *const *argv) {
     unsigned short width = 80, height = 20, live = 0;
@@ -39,14 +41,32 @@ int main(int argc, char *const *argv) {
         fprintf(stderr, "ERROR: Not enough space available.\n");
         return 1;
     }
-    print_mars(mars);
-    if (live) {
-        execute_live_commands(mars);
-    } else {
-        execute_command_string(mars, befehle);
-    }
     if (outputfilename != NULL) {
-        save_to_file(mars, outputfilename);
+        pid_t pid = fork(), status = -1;
+        if (pid == (pid_t) -1) {
+            fprintf(stderr, "ERROR: fork() failed.\n");
+            return 3;
+        } else if (pid == (pid_t) 0) {
+            save_to_file(mars, outputfilename);
+            return 0;
+        } else {
+            print_mars(mars);
+            if (live) {
+                execute_live_commands(mars);
+            } else {
+                execute_command_string(mars, befehle);
+            }
+            do {
+                status = waitpid(pid, NULL, WNOHANG);
+            } while(!status);
+        }
+    } else {
+        print_mars(mars);
+        if (live) {
+            execute_live_commands(mars);
+        } else {
+            execute_command_string(mars, befehle);
+        }
     }
     delete_mars(mars);
     return 0;
