@@ -42,7 +42,7 @@ int main(int argc, char *const *argv) {
         return 1;
     }
     if (outputfilename != NULL) {
-        pid_t pid = fork(), status = -1;
+        pid_t pid = fork();
         if (pid == (pid_t) -1) {
             fprintf(stderr, "ERROR: fork() failed.\n");
             return 3;
@@ -56,9 +56,7 @@ int main(int argc, char *const *argv) {
             } else {
                 execute_command_string(mars, befehle);
             }
-            do {
-                status = waitpid(pid, NULL, WNOHANG);
-            } while(!status);
+            waitpid(pid, NULL, 0);
         }
     } else {
         print_mars(mars);
