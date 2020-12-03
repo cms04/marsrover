@@ -32,10 +32,6 @@ int main(int argc, char *const *argv) {
                 break;
         }
     }
-    if (height > 32740) {
-        fprintf(stderr, "ERROR: Please choose a lower height.\n");
-        return 2;
-    }
     mars_t *mars = (inputfilename == NULL) ? create_random(width, height) : create_from_file(inputfilename);
     if (mars == NULL) {
         fprintf(stderr, "ERROR: Not enough space available.\n");
@@ -45,7 +41,7 @@ int main(int argc, char *const *argv) {
     if (pid == (pid_t) -1) {
         fprintf(stderr, "ERROR: fork() failed.\n");
         delete_mars(mars);
-        return 3;
+        return 2;
     } else if (pid == (pid_t) 0) {
         if (outputfilename != NULL) {
             save_to_file(mars, outputfilename);
