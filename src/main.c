@@ -31,6 +31,10 @@ int main(int argc, char *const *argv) {
         }
     }
     Mars *mars = (inputfilename == NULL) ? createRandom(width, height) : createFromFile(inputfilename);
+    if (mars == NULL) {
+        fprintf(stderr, "ERROR: Not enough space available.\n");
+        return 1;
+    }
     print(mars);
     if (live) {
         fuehreLiveBefehleAus(mars);

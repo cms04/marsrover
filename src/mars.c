@@ -40,17 +40,31 @@ void arbeiteBefehleAb(Mars *mars, char *befehle) {
 
 Mars *createRandom(unsigned short width, unsigned short height) {
     Mars *mars = (Mars *) malloc(sizeof(Mars));
+    if (mars == NULL) {
+        return NULL;
+    }
     mars->width = width;
     mars->height = height;
     mars->rover = createRover(width / 2, height / 2);
+    if (mars->rover == NULL) {
+        free(mars);
+        return NULL;
+    }
     mars->obstracles = createRandomObstracles(width, height);
+    if (mars->obstracles == NULL) {
+        deleteRover(mars->rover);
+        free(mars);
+        return NULL;
+    }
     return mars;
 }
 
 void deleteMars(Mars *mars) {
-    deleteRover(mars->rover);
-    deleteObstracles(mars->obstracles, mars->height);
-    free(mars);
+    if (mars != NULL) {
+        deleteRover(mars->rover);
+        deleteObstracles(mars->obstracles, mars->height);
+        free(mars);
+    }
 }
 
 void print(Mars *mars) {
@@ -143,16 +157,31 @@ Mars *createFromFile(char *filename) {
     FILE *in = fopen(filename, "rb");
     if (in == NULL) {
         fprintf(stderr, "ERROR: Could not open file %s\n", filename);
-        exit(1);
+        return NULL;
     }
     unsigned short height = 0, width = 0;
     fread(&height, sizeof(unsigned short), 1, in);
     fread(&width, sizeof(unsigned short), 1, in);
     Mars *mars = (Mars *) malloc(sizeof(Mars));
+    if (mars == NULL) {
+        fclose(in);
+        return NULL;
+    }
     mars->width = width;
     mars->height = height;
     mars->rover = createRover(width / 2, height / 2);
+    if (mars->rover == NULL) {
+        free(mars);
+        fclose(in);
+        return NULL;
+    }
     mars->obstracles = readObstraclesFromFile(in, mars->height);
+    if (mars->obstracles == NULL) {
+        deleteRover(mars->rover);
+        free(mars);
+        fclose(in);
+        return NULL;
+    }
     fclose(in);
     return mars;
 }

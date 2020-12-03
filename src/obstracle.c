@@ -8,12 +8,24 @@ static Obstracle *addHindernisToList(Obstracle *list, Obstracle *new);
 
 Obstracle **createRandomObstracles(unsigned short maxwidth, unsigned short maxheight) {
     Obstracle **list = (Obstracle **) malloc(maxheight * sizeof(Obstracle *));
+    if (list == NULL) {
+        return NULL;
+    }
     for (unsigned short i = 0; i < maxheight; i++) {
         *(list + i) = NULL;
     }
     srand(time(NULL));
     pthread_t *threads = (pthread_t *) malloc(maxheight * sizeof(pthread_t));
+    if (threads == NULL) {
+        free(list);
+        return NULL;
+    }
     Parameter *parameters = (Parameter *) malloc(maxheight * sizeof(Parameter));
+    if (parameters == NULL) {
+        free(list);
+        free(threads);
+        return NULL;
+    }
     for (unsigned short i = 0; i < maxheight; i++) {
         (parameters + i)->list = list + i;
         (parameters + i)->maxheight = maxheight;
@@ -44,6 +56,9 @@ void *createObstracleList(void *parameter) {
 
 Obstracle **readObstraclesFromFile(FILE *in, unsigned short maxheight) {
     Obstracle **list = (Obstracle **) malloc(maxheight * sizeof(Obstracle *));
+    if (list == NULL) {
+        return NULL;
+    }
     for (unsigned short i = 0; i < maxheight; i++) {
         *(list + i) = NULL;
     }
@@ -57,19 +72,24 @@ Obstracle **readObstraclesFromFile(FILE *in, unsigned short maxheight) {
 }
 
 void deleteObstracles(Obstracle **lists, unsigned short maxheight) {
-    for (unsigned short i = 0; i < maxheight; i++) {
-        Obstracle *tmp, *list = *(lists + i);
-        while (list != NULL) {
-            tmp = list;
-            list = list->next;
-            free(tmp);
+    if (lists != NULL) {
+        for (unsigned short i = 0; i < maxheight; i++) {
+            Obstracle *tmp, *list = *(lists + i);
+            while (list != NULL) {
+                tmp = list;
+                list = list->next;
+                free(tmp);
+            }
         }
+        free(lists);
     }
-    free(lists);
 }
 
 static Obstracle *createNewObstracle(unsigned short xposition, unsigned short yposition) {
     Obstracle *new = (Obstracle *) malloc(sizeof(Obstracle));
+    if (new == NULL) {
+        return NULL;
+    }
     new->xposition = xposition;
     new->yposition = yposition;
     new->next = NULL;
@@ -77,14 +97,16 @@ static Obstracle *createNewObstracle(unsigned short xposition, unsigned short yp
 }
 
 static Obstracle *addHindernisToList(Obstracle *list, Obstracle *new) {
-    if (list == NULL) {
-        return new;
+    if (new != NULL) {
+        if (list == NULL) {
+            return new;
+        }
+        Obstracle *current = list;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = new;
     }
-    Obstracle *current = list;
-    while (current->next != NULL) {
-        current = current->next;
-    }
-    current->next = new;
     return list;
 }
 

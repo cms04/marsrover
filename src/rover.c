@@ -4,6 +4,9 @@
 
 Rover *createRover(unsigned short xposition, unsigned short yposition) {
     Rover *rover = (Rover *) malloc(sizeof(Rover));
+    if (rover == NULL) {
+        return NULL;
+    }
     rover->xposition = xposition;
     rover->yposition = yposition;
     rover->richtung = UP;
@@ -11,7 +14,9 @@ Rover *createRover(unsigned short xposition, unsigned short yposition) {
 }
 
 void deleteRover(Rover *rover) {
-    free(rover);
+    if (rover != NULL) {
+        free(rover);
+    }
 }
 
 void printRover(Rover *rover) {
