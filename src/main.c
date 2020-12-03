@@ -30,6 +30,10 @@ int main(int argc, char *const *argv) {
                 break;
         }
     }
+    if (height > 32740) {
+        fprintf(stderr, "ERROR: Please choose a lower height.\n");
+        return 2;
+    }
     mars_t *mars = (inputfilename == NULL) ? create_random(width, height) : create_from_file(inputfilename);
     if (mars == NULL) {
         fprintf(stderr, "ERROR: Not enough space available.\n");
